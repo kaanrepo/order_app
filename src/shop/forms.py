@@ -25,15 +25,17 @@ class OrderPaidFinishedForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
 
+# class OrderItemForm(forms.Form):
+#     product = forms.ChoiceField()
+#     quantity = forms.IntegerField()
+
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['product'].choices = [(product.product.id, product.product) for product in MenuItem.objects.filter(is_active=True)]
+
+
 class OrderItemForm(forms.Form):
-    product = forms.ChoiceField()
-    quantity = forms.IntegerField()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['product'].choices = [(product.product.id, product.product) for product in MenuItem.objects.filter(is_active=True)]
-
-
+    quantity=forms.IntegerField(min_value=1, initial=1)
 
 class ProductForm(forms.ModelForm):
     class Meta:

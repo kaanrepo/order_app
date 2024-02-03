@@ -1,0 +1,10 @@
+<div id="menu-category-container">
+    <ul class="list-group">
+        {% for item in items %}
+        <li class="list-group-item"><span>{{item.product.name}} // {{item.price}}</span>
+            order: {{order.id}} item:{{item.id}}
+            <button class="btn btn-primary" hx-get={% url "order-item-create-view" item.id %} hx-target="#menu-category-container">Add Item</button>
+        </li>
+        {% endfor %}
+    </ul>
+</div>

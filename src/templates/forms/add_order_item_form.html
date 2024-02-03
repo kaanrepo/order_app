@@ -1,0 +1,7 @@
+<form >
+  {% csrf_token %}
+    {{ form.as_p}}
+    <button hx-target="#order-detail-page" hx-post={% url "order-item-create-view" item.id %} class="btn btn-primary">Submit</button>
+    <button class="btn btn-primary">Cancel</button>
+</form>
+

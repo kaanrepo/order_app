@@ -26,7 +26,7 @@ SECRET_KEY = config("DJANGO_SECRET_KEY", default=None, cast=str)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     ### django apps
     'accounts',
     'shop',
+    'django_htmx',
 ]
 
 MIDDLEWARE = [
@@ -52,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_htmx.middleware.HtmxMiddleware",
+    'shop.middleware.OrderMiddleware',
 ]
 
 ROOT_URLCONF = 'order.urls'

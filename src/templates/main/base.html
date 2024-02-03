@@ -8,9 +8,22 @@
     <title>{% block head_title %}HOME{% endblock head_title %}</title>
 
 </head>
+
+
 <body>
-    <div>
-    {% block content %}{% endblock content %}
+
+    <div class="container">
+    <div class="sidebar">
     </div>
+
+        <div class="content">
+            {% block content %}
+            <h1>HOME</h1>
+            {% endblock content %}
+        </div>
+
+    </div>
+   
 </body>
 </html>
+
