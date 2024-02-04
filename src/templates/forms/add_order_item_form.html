@@ -1,7 +1,13 @@
 <form >
   {% csrf_token %}
+  <button hx-target="#order-items-list" hx-post={% url "order-item-create-view" item.id %}?quantity=1 class="btn btn-primary">1</button>
+  <button hx-target="#order-items-list" hx-post={% url "order-item-create-view" item.id %}?quantity=2 class="btn btn-primary">2</button>
+  <button hx-target="#order-items-list" hx-post={% url "order-item-create-view" item.id %}?quantity=3 class="btn btn-primary">3</button>
+  <button hx-target="#order-items-list" hx-post={% url "order-item-create-view" item.id %}?quantity=4 class="btn btn-primary">4</button>
+  <button hx-target="#order-items-list" hx-post={% url "order-item-create-view" item.id %}?quantity=5 class="btn btn-primary">5</button>
+  <hr>
     {{ form.as_p}}
-    <button hx-target="#order-detail-page" hx-post={% url "order-item-create-view" item.id %} class="btn btn-primary">Submit</button>
-    <button class="btn btn-primary">Cancel</button>
+    <button hx-target="#order-items-list" hx-post={% url "order-item-create-view" item.id %} class="btn btn-primary">Submit</button>
+    <button hx-target="#menu-category-container"  hx-get={% url "menu-category-list-view" %} hx-swap="outerHTML" class="btn btn-primary">Cancel</button>
 </form>
 

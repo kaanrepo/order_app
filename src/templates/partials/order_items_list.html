@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <h2>Order Items</h2>
+    <h2>Order Items</h2>                 <p>Total Bill: {{ order.total_bill }}</p>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -15,7 +15,15 @@
                 <td>{{item.menu_item.product.name}} {{item.menu_item.product.unit}} {{item.menu_item.product.size}}</td>
                 <td>{{item.quantity}}</td>
                 <td>{{item.order.table.name}}</td>
-                <td><a href={% url 'order-detail-view' item.order.id %}>Order</a></td>
+                <td>
+                    {% if item.is_delivered %}
+                        <p>Delivered</p>
+                    {% else %}
+                    <form>{% csrf_token %}
+                        <button hx-target="#order-items-list" hx-post={% url "deliver-order-item-view" item.id %} class="btn btn-primary" type="button">Deliver Item</button>
+                    </form>
+                </td>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

@@ -1,26 +1,32 @@
 {% extends "main/base.html" %}
 {% block content %}
 
+
 <div id="order-detail-page">
+<div class="container d-flex flex-column">
+    <div class="row">
+        <div class="col-md-4" style="padding-top:10px">
+            <div class="grid-item">
+                <h1>Order Detail</h1>
+                <p>Order ID: {{ order.id }}</p>
+                <p>Table: {{ order.table.name }}</p>
+                <p>Created at: {{ order.created }}</p>
+                <p>Is paid: {{ order.is_paid }}</p>
+                <p>Is finished: {{ order.is_finished }}</p>
+            </div>
+            <button class="btn btn-primary" hx-get="{% url "menu-category-list-view" %}" hx-target="#menu-category-container" hx-swap="outerHTML">
+                Open Menu
+            </button>
+        </div>
+        <div class="col-md-4" id='order-items-list' style="padding-top:10px">
+            {% include "partials/order_items_list.html" %}
+        </div>
+        <div class="col-md-4" style="padding-top:10px">
+            <div id="menu-category-container">
 
-<div class="grid-item">
-    <h1>Order Detail</h1>
-    <p>Order ID: {{ order.id }}</p>
-    <p>Table: {{ order.table.name }}</p>
-    <p>Created at: {{ order.created }}</p>
-    <p>Is paid: {{ order.is_paid }}</p>
-    <p>Is finished: {{ order.is_finished }}</p>
-</div>
-
-{% include "partials/order_items_list.html" %}
-
-        <button class="btn btn-primary" hx-get="{% url "menu-category-list-view" %}" hx-target="#menu-category-container" hx-swap="outerHTML">
-            Open Menu
-        </button>
-        <hr>
-
-    <div id="menu-category-container">
-
+            </div>
+        </div>
     </div>
+</div>
 </div>
 {% endblock %}

@@ -12,13 +12,15 @@
 
 <body>
 
+
     <div class="container">
     <div class="sidebar">
     </div>
 
         <div class="content">
+            {% include "main/navbar.html" %}
             {% block content %}
-            <h1>HOME</h1>
+
             {% endblock content %}
         </div>
 

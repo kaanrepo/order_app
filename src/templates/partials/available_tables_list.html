@@ -1,0 +1,18 @@
+<div
+  class="container d-flex flex-column justify-content-start"
+  style="
+    margin: 0px;
+    padding: 10px;
+  "
+>    
+{% if available_tables.count == 0 %}
+    <button hx-boost="true" hx-target="#order-detail-page" hx-get={% url "home-view" %} hx-trigger="load delay:1208ms" class="btn btn-primary btn-table btn-tal" type="button">No Available Table</button>
+{% else %}
+    {% for table in available_tables %}
+        <form>
+            {% csrf_token %}
+        <button hx-boost="true" hx-target="#order-detail-page" hx-post={% url "activate-table-order-view" table.id %} class="btn btn-primary btn-table btn-tal" type="button">{{table.name}}</button>
+        </form>
+    {% endfor %}
+{% endif %}
+</div>

@@ -12,9 +12,10 @@
     </div>
 {% endfor %}
 
+<div id="order-detail-page">
 
 <h3>Open Tables</h3>
-<div class="table-responsive">
+<div class="table-responsive" id='open-tables'>
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
@@ -36,6 +37,7 @@
         </tbody>
     </table>
 </div>
+<button hx-swap="outerHTML" hx-get={% url "available-tables-view" %} class="btn btn-primary btn-table btn-tal" type="button">Open Order</button>
 <hr>
 <h3>Undelivered Items</h3>
 
@@ -62,6 +64,8 @@
     </table>
 </div>
 
+
+
     {% if errors %}
         <div class="alert alert-danger">
             <ul>
@@ -72,5 +76,6 @@
         </div>
     {% endif %}
 
+</div>
 
 {% endblock %}
