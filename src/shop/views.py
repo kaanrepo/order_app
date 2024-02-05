@@ -145,3 +145,29 @@ class DeliverOrderItemView(View):
         return render(request, 'partials/order_items_list.html', context)
         #return redirect('order-detail-view', order_item.order.id)
     
+class DeleteOrderItemView(View):
+    """View for deleting order item."""
+
+    def post(self, request, item_id):
+        order = request.order
+        order_items = order.orderitem_set.all()
+        order_item = OrderItem.objects.get(id=item_id)
+        order_item.delete()
+        context={
+            'order': order,
+            'order_items': order_items
+        }
+        return render(request, 'partials/order_items_list.html', context)
+        #return redirect('order-detail-view', order_item.order.id)
+    
+class FinalizeOrderView(View):
+    """View for finalizing order."""
+
+    def post(self, request, order_id):
+        order = Order.objects.get(id=order_id)
+        order.is_finished = True
+        order.save()
+        table = order.table
+        table.in_use = False
+        table.save()
+        return redirect('home-view')

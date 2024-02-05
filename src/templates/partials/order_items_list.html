@@ -7,6 +7,7 @@
                 <th>Quantity</th>
                 <th>Table</th>
                 <th>Order</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -24,8 +25,12 @@
                     </form>
                 </td>
                 {% endif %}
+                <td><form>{% csrf_token %}
+                    <button hx-target="#order-items-list" class="btn btn-primary" hx-post={% url "delete-order-item-view" item.id %}>Delete Item</button></td>
+                </form>
             </tr>
             {% endfor %}
+
         </tbody>
     </table>
 </div>

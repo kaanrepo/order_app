@@ -17,6 +17,15 @@
             <button class="btn btn-primary" hx-get="{% url "menu-category-list-view" %}" hx-target="#menu-category-container" hx-swap="outerHTML">
                 Open Menu
             </button>
+
+            <br>
+            <hr>
+            <form>
+                {% csrf_token %}
+                <button class="btn btn-primary" hx-post="{% url 'finalize-order-view' order.id %}" hx-trigger="click" hx-swap="none" id="finalizeOrderButton">
+                    Finalize Order
+                </button>
+            </form>
         </div>
         <div class="col-md-4" id='order-items-list' style="padding-top:10px">
             {% include "partials/order_items_list.html" %}
@@ -29,4 +38,11 @@
     </div>
 </div>
 </div>
+
+
+<script>
+    document.getElementById('finalizeOrderButton').addEventListener('htmx:afterOnLoad', function() {
+        window.location.href = "{% url "home-view" %}";  // replace '/home' with your actual home page URL
+    });
+</script>
 {% endblock %}
