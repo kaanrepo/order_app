@@ -1,0 +1,8 @@
+<div class="menu-category-detail">
+  <h2>{{ category.name }}</h2>
+  <ul>
+    {% for item in category.items %}
+      <li>{{ item.name }} - {{ item.price }}</li>
+    {% endfor %}
+  </ul>
+</div>
