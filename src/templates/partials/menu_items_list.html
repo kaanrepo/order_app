@@ -1,19 +1,50 @@
 
-{% extends "main/base.html" %}
-
-{% block content %}
-
-<div id="menu-category-container">
+{% comment %} <div id="menu-category-container">
     <ul class="list-group">
-        {% for item in items %}
+
         <li class="list-group-item"><span>{{item.product.name}} // {{item.price}}</span>
             order: {{order.id}} item:{{item.id}}
             <button class="btn btn-primary" hx-get={% url "order-item-create-view" item.id %} hx-target="#menu-category-container">Add Item</button>
         </li>
-        {% endfor %}
+
     </ul>
-</div>
+</div> {% endcomment %}
 
-    
-{% endblock content %}
-
+    <div class="card shadow ">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Projects</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div id="dataTable-1" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+                        <table id="dataTable" class="table my-0">
+                            <thead style="width: 70%;">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Unit</th>
+                                    <th>Size</th>
+                                    <th>Price</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>{{item.product.name}}</td>
+                                    <td>{{item.product.unit}}</td>
+                                    <td>{{item.product.size}}</td>
+                                    <td>{{item.price}}</td>
+                                    <td><button hx-get="{% url "order-item-create-view" item.id %}" hx-target="#order-item-quantity-form" hx-swap="innerHTML" class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;">Add</button></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-xl-4" id='order-item-quantity-form'>
+                    {% comment %} {% include "forms/add_order_item_form2.html" %} {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>

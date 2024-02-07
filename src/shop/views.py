@@ -81,7 +81,7 @@ class OrderItemCreateView(View):
             'order': order,
             'item': item
         }
-        return render(request, 'forms/add_order_item_form.html', context=context)
+        return render(request, 'forms/add_order_item_form2.html', context=context)
 
     def post(self, request, item_id):
         """If there's a quantity as a query parameter, use that. Otherwise, use the form."""
@@ -386,7 +386,7 @@ class MenuItemDetailView(View):
         }
         return render(request, 'partials/menu_items_detail.html', context=context)
 
-class MenuItemListView(View):
+class MenuItemListView2(View):
     """View for listing menu items."""
 
     def get(self, request):

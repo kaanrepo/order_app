@@ -1,0 +1,28 @@
+<div class="card shadow mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="text-primary fw-bold m-0">Order Details</h5>
+    </div>
+    <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                <div class="row align-items-center no-gutters">
+                    <div class="col me-2">
+                        <h6 class="mb-0"><strong>Table Name</strong></h6><span class="text-m">{{order.table.name}}</span>
+                    </div>
+                    <div class="col me-2">
+                        <h6 class="mb-0"><strong>Order Id</strong></h6><span class="text-m">{{order.id}}</span>
+                    </div>
+                    <div class="col me-2">
+                        <h6 class="mb-0"><strong>Time</strong></h6><span class="text-m">{{ order.created|date:"P" }}</span>
+                    </div>
+                    <div class="col me-2">
+                        <h6 class="mb-0"><strong>Paid</strong></h6><span class="text-m">{{ order.is_paid }}</span>
+                    </div>
+                    <div class="col me-2">
+                        <h6 class="mb-0"><strong>Finished</strong></h6><span class="text-m">{{ order.is_finished }}</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<form>
+{% csrf_token %}
+<div class="row">
+    <div class="col text-center"><input type="number" name="quantity" style="margin-left: 40px;" /><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %} class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">Add</button></div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="row">
+            <div class="col" style="margin-top: 10px;">
+                <section class="text-center"><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=1 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">1</button><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=2 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">2</button><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=3 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">3</button></section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <section class="text-center" style="margin-top: 3px;"><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=4 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">4</button><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=5 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">5</button><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=6 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">6</button></section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <section class="text-center" style="margin-top: 3px;"><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=7 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">7</button><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=8 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">8</button><button hx-swap="innerHTML" hx-target="#order-items-container" hx-post={% url "order-item-create-view" item.id %}?quantity=9 class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;margin-left: 3px;margin-right: 3px;">9</button></section>
+            </div>
+        </div>
+    </div>
+</div>
+</form>

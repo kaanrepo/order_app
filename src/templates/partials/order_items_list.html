@@ -1,36 +1,36 @@
-<div class="table-responsive">
-    <h2>Order Items</h2>                 <p>Total Bill: {{ order.total_bill }}</p>
-    <table class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                <th style="width:35%">Item Name</th>
-                <th>Quantity</th>
-                <th>Table</th>
-                <th>Order</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in order_items %}
-            <tr>
-                <td>{{item.menu_item.product.name}} {{item.menu_item.product.unit}} {{item.menu_item.product.size}}</td>
-                <td>{{item.quantity}}</td>
-                <td>{{item.order.table.name}}</td>
-                <td>
-                    {% if item.is_delivered %}
-                        <p>Delivered</p>
-                    {% else %}
-                    <form>{% csrf_token %}
-                        <button hx-target="#order-items-list" hx-post={% url "deliver-order-item-view" item.id %} class="btn btn-primary" type="button">Deliver Item</button>
-                    </form>
-                </td>
-                {% endif %}
-                <td><form>{% csrf_token %}
-                    <button hx-target="#order-items-list" class="btn btn-primary" hx-post={% url "delete-order-item-view" item.id %}>Delete Item</button></td>
-                </form>
-            </tr>
-            {% endfor %}
-
-        </tbody>
-    </table>
+<div class="card shadow">
+    <div class="card-header py-3">
+        <p class="text-primary m-0 fw-bold">Order Items</p><span>Total Bill: {{ order.total_bill }}</span>
+    </div>
+    <div class="card-body">
+        <div id="dataTable" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+            <table id="dataTable" class="table my-0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                        <th>Deliver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                        <td>{{item.menu_item.product.name}} {{item.menu_item.product.unit}} {{item.menu_item.product.size}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.order.table.name}}</td>
+                        <td>{% if item.is_delivered %}
+                                <p>Delivered</p>
+                            {% else %}
+                            <form>{% csrf_token %}
+                            <button hx-target="#order-items-container" hx-post={% url "deliver-order-item-view" item.id %} class="btn btn-primary" type="button">Deliver Item</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
