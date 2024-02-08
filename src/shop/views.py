@@ -15,7 +15,6 @@ class ActiveDashboardView(View):
     """Home View that includes active orders and undelivered items."""
 
     def get(self, request):
-        qs = request.GET.get('q')
         active_orders = Order.objects.filter(is_finished=False)
         undelivered_items = OrderItem.objects.filter(
             order__is_finished=False, is_delivered=False)
@@ -27,13 +26,13 @@ class ActiveDashboardView(View):
             del request.session['order_id']
         except:
             pass
-        return render(request, 'pages/home.html', context=context)
+        return render(request, 'pages/new_home.html', context=context)
 
 
 class OrderDetailView(View):
     """View for order details."""
 
-    def get(self, request, order_id):
+    def get(self, request, order_id:int):
         order = Order.objects.get(id=order_id)
         order_items = order.orderitem_set.all()
         context = {
@@ -58,7 +57,7 @@ class MenuCategoryListView(View):
 class MenuItemListView(View):
     """View for menu item."""
 
-    def get(self, request, category_handle):
+    def get(self, request, category_handle:str):
         category = MenuCategory.objects.get(handle=category_handle)
         items = category.menuitem_set.all()
         context = {
@@ -71,7 +70,7 @@ class MenuItemListView(View):
 class OrderItemCreateView(View):
     """View for creating order item."""
 
-    def get(self, request, item_id):
+    def get(self, request, item_id:int):
         order = request.order
         item = MenuItem.objects.get(id=item_id)
         print(item)
@@ -83,7 +82,7 @@ class OrderItemCreateView(View):
         }
         return render(request, 'forms/add_order_item_form2.html', context=context)
 
-    def post(self, request, item_id):
+    def post(self, request, item_id:int):
         """If there's a quantity as a query parameter, use that. Otherwise, use the form."""
         order = request.order
         order_items = order.orderitem_set.all()
@@ -121,7 +120,7 @@ class AvailableTablesView(View):
 class ActivateTableOrderView(View):
     """View for activating table order."""
 
-    def post(self, request, table_id):
+    def post(self, request, table_id:int):
         table = Table.objects.get(id=table_id)
         table.in_use = True
         table.save()
@@ -132,7 +131,7 @@ class ActivateTableOrderView(View):
 class DeliverOrderItemView(View):
     """View for delivering order item."""
 
-    def post(self, request, item_id):
+    def post(self, request, item_id:int):
         order = request.order
         order_items = order.orderitem_set.all()
         order_item = OrderItem.objects.get(id=item_id)
@@ -148,7 +147,7 @@ class DeliverOrderItemView(View):
 class DeleteOrderItemView(View):
     """View for deleting order item."""
 
-    def post(self, request, item_id):
+    def post(self, request, item_id:int):
         order = request.order
         order_items = order.orderitem_set.all()
         order_item = OrderItem.objects.get(id=item_id)

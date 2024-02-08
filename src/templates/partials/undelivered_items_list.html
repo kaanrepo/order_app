@@ -5,7 +5,7 @@
                 <h3 class="text-primary fw-bold m-0">Undelivered Items</h3>
             </div>
             <div class="col">
-                <p class="text-end text-primary m-0 fw-bold">Item count:</p>
+                <p class="text-end text-primary m-0 fw-bold">Item count:{{undelivered_items.count}}</p>
             </div>
         </div>
     </div>
@@ -19,36 +19,19 @@
                         <th>Size</th>
                         <th>Order Time</th>
                         <th>Table</th>
-                        <th>Salary</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Chief Executive Officer(CEO)</td>
-                        <td>London</td>
-                        <td>47</td>
-                        <td>2009/10/09<br /></td>
-                        <td>$1,200,000</td>
-                    </tr>
-                    <tr>
-                        <td>Ashton Cox</td>
-                        <td>Junior Technical Author</td>
-                        <td>San Francisco</td>
-                        <td>66</td>
-                        <td>2009/01/12<br /></td>
-                        <td>$86,000</td>
-                    </tr>
+                    {% for item in undelivered_items %}
+                        <tr>
+                            <td>{{item.menu_item.product.name}}</td>
+                            <td>{{item.menu_item.product.unit}}</td>
+                            <td>{{item.menu_item.product.size}}</td>
+                            <td>{{item.created|date:"P"}}<br /></td>
+                            <td>{{item.order.table.name}}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
-                <tfoot>
-                    <tr>
-                        <td><strong>Name</strong></td>
-                        <td><strong>Position</strong></td>
-                        <td><strong>Office</strong></td>
-                        <td><strong>Age</strong></td>
-                        <td><strong>Start date</strong></td>
-                        <td><strong>Salary</strong></td>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
