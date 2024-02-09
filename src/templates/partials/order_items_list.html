@@ -18,7 +18,7 @@
                     <tr>
                         <td>{{item.menu_item.product.name}} {{item.menu_item.product.unit}} {{item.menu_item.product.size}}</td>
                         <td>{{item.quantity}}</td>
-                        <td>{{item.order.table.name}}</td>
+                        <td>{{item.created|date:"P" }}</td>
                         <td>{% if item.is_delivered %}
                                 <p>Delivered</p>
                             {% else %}

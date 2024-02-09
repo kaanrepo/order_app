@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product
 from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm
+from django.contrib import messages
 
 
 # Create your views here.
@@ -39,6 +40,15 @@ class PartialOrderItemsListDeleteView(View):
         }
         return render(request, 'partials/order_items_list_delete.html', context)
 
+class PartialOrderItemsListView(View):
+    def get(self, request):
+        order = request.order
+        order_items = order.orderitem_set.all()
+        context={
+            'order': order,
+            'order_items': order_items
+        }
+        return render(request, 'partials/order_items_list.html', context)
 
 class OrderDetailView(View):
     """View for order details."""
@@ -84,7 +94,6 @@ class OrderItemCreateView(View):
     def get(self, request, item_id:int):
         order = request.order
         item = MenuItem.objects.get(id=item_id)
-        print(item)
         form = OrderItemForm()
         context = {
             'form': form,
@@ -96,6 +105,9 @@ class OrderItemCreateView(View):
     def post(self, request, item_id:int):
         """If there's a quantity as a query parameter, use that. Otherwise, use the form."""
         order = request.order
+        if order.is_finished:
+            messages.error(request, 'Order is already finalized.')
+            return render(request, 'partials/messages_template.html', {})
         order_items = order.orderitem_set.all()
         menu_item = MenuItem.objects.get(id=item_id)
         form = OrderItemForm(request.POST)
@@ -127,6 +139,25 @@ class AvailableTablesView(View):
             'available_tables': available_tables,
         }
         return render(request, 'partials/available_tables_list.html', context=context)
+    
+class SwitchOrderTableView(View):
+    """View for switching table of order."""
+
+    def post(self, request, table_id:int):
+        order = request.order
+        old_table = order.table
+        new_table = Table.objects.get(id=table_id)
+        order.table = new_table
+        order.save()
+        old_table.in_use = False
+        old_table.save()
+        new_table.in_use = True
+        new_table.save()
+        context = {
+            'order': order
+        }
+        return render(request, 'partials/order_info.html', context)
+
     
 class ActivateTableOrderView(View):
     """View for activating table order."""
@@ -180,7 +211,22 @@ class FinalizeOrderView(View):
         table = order.table
         table.in_use = False
         table.save()
-        return redirect('home-view')
+        context = {
+            'order': order
+        }
+        return render(request, 'partials/order_info.html', context)
+
+class PaidOrderView(View):
+    """View for paid order."""
+
+    def post(self, request):
+        order = request.order
+        order.is_paid = True
+        order.save()
+        context = {
+            'order': order
+        }
+        return render(request, 'partials/order_info.html', context)
 
 ### Product CRUD Views
 

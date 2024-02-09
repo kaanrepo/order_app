@@ -16,10 +16,22 @@
                         <h6 class="mb-0"><strong>Time</strong></h6><span class="text-m">{{ order.created|date:"P" }}</span>
                     </div>
                     <div class="col me-2">
+                        {% if order.is_paid %}
                         <h6 class="mb-0"><strong>Paid</strong></h6><span class="text-m">{{ order.is_paid }}</span>
+                        {% else %}
+                        <form>{% csrf_token %}
+                        <button class="btn btn-primary" style="padding:7px; margin:3px;" hx-post="{% url 'paid-order-view' %}" hx-trigger="click" hx-target="#order-info-container">Pay</button></form>
+                        {% endif %}
                     </div>
                     <div class="col me-2">
+                        {% if order.is_finished %}
                         <h6 class="mb-0"><strong>Finished</strong></h6><span class="text-m">{{ order.is_finished }}</span>
+                        {% else %}
+                        <form>{% csrf_token %}
+                        <button class="btn btn-primary" style="padding:7px; margin:3px;" hx-post="{% url 'finalize-order-view' order.id %}" hx-target="#order-info-container" hx-trigger="click" {% if not order.is_paid %} hx-confirm="Order is not paid. Sure to finish?"{% endif %}>
+                            Finalize
+                        </button></form>
+                        {% endif %}
                     </div>
                 </div>
             </li>
