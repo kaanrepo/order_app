@@ -1,7 +1,7 @@
 {% extends "main/new_base.html" %}
 {% block content %}
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
         <div class="col">
             {% include "partials/order_info.html" %}
@@ -14,13 +14,13 @@
                 <div class="card-body" >
                     <form>
                         {% csrf_token %}
-                        <button class="btn btn-primary" style="margin-right: 10px;margin-left: 10px;" hx-target="#order-items-container" hx-get="{% url 'menu-category-list-view' %}" hx-trigger="click" hx-swap="innerHTML">
+                        <button class="btn btn-primary" style="padding:10px; margin:5px;" hx-target="#order-items-container" hx-get="{% url 'menu-category-list-view' %}" hx-trigger="click" hx-swap="innerHTML">
                             Add Item
                         </button>
-                        <button class="btn btn-primary" style="margin-right: 10px;margin-left: 10px;" hx-target="#order-items-container" hx-get="{% url 'partial-order-items-list-delete-view' %}" hx-trigger="click" hx-swap="innerHTML">
+                        <button class="btn btn-primary" style="padding:10px; margin:5px;" hx-target="#order-items-container" hx-get="{% url 'partial-order-items-list-delete-view' %}" hx-trigger="click" hx-swap="innerHTML">
                             Delete Item
                         </button>
-                        <button class="btn btn-primary" style="margin-right: 10px;margin-left: 10px;" hx-post="{% url 'finalize-order-view' order.id %}" hx-trigger="click" hx-swap="none" id="finalizeOrderButton">
+                        <button class="btn btn-primary" style="padding:10px; margin:5px;" hx-post="{% url 'finalize-order-view' order.id %}" hx-trigger="click" hx-swap="none" id="finalizeOrderButton">
                             Finalize Order
                         </button>
                     </form>
