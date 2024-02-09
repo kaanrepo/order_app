@@ -4,11 +4,13 @@ from .views import (home, ActiveDashboardView, OrderDetailView, MenuCategoryList
                        DeliverOrderItemView, DeleteOrderItemView, FinalizeOrderView,
                        ProductDetailView, ProductListView, ProductCreateView, ProductUpdateView, ProductDeleteView,
                        MenuCategoryCreateView, MenuCategoryUpdateView, MenuCategoryDeleteView,MenuCategoryDetailView,
-                       MenuItemCreateView, MenuItemUpdateView, MenuItemDeleteView, MenuItemDetailView, MenuItemListView)
+                       MenuItemCreateView, MenuItemUpdateView, MenuItemDeleteView, MenuItemDetailView, MenuItemListView,
+                       PartialOrderItemsListDeleteView)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
     path('order/<int:order_id>/', OrderDetailView.as_view(), name='order-detail-view'),
+    path('order/partial/', PartialOrderItemsListDeleteView.as_view(), name='partial-order-items-list-delete-view'),
     path('order/finalize/<int:order_id>/', FinalizeOrderView.as_view(), name='finalize-order-view'),
     path('order_item/create/<int:item_id>/', OrderItemCreateView.as_view(), name='order-item-create-view'),
     path('order_item/deliver/<int:item_id>/', DeliverOrderItemView.as_view(), name='deliver-order-item-view'),

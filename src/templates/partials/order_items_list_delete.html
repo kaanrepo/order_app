@@ -1,0 +1,81 @@
+
+{% comment %} <div id="menu-category-container">
+    <ul class="list-group">
+
+        <li class="list-group-item"><span>{{item.product.name}} // {{item.price}}</span>
+            order: {{order.id}} item:{{item.id}}
+            <button class="btn btn-primary" hx-get={% url "order-item-create-view" item.id %} hx-target="#menu-category-container">Add Item</button>
+        </li>
+
+    </ul>
+</div> {% endcomment %}
+
+{% comment %} 
+<div class="card shadow ">
+    <div class="card-header py-3">
+        <h6 class="text-primary fw-bold m-0">Projects</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <div id="dataTable-1" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+                    <table id="dataTable" class="table my-0">
+                        <thead style="width: 70%;">
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Unit</th>
+                                <th>Size</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td>{{item.product.name}}</td>
+                                <td>{{item.product.unit}}</td>
+                                <td>{{item.product.size}}</td>
+                                <td>{{item.price}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-xl-4" id='order-item-quantity-form'>
+            </div>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+<div class="card shadow">
+    <div class="card-header py-3">
+        <p class="text-primary m-0 fw-bold">Order Items</p><span>Total Bill: {{ order.total_bill }}</span>
+    </div>
+    <div class="card-body">
+        <div id="dataTable" class="table-responsive table mt-2" role="grid" aria-describedby="dataTable_info">
+            <table id="dataTable" class="table my-0">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                    <tr>
+                        
+                        <td><form>{% csrf_token %}<button hx-post="{% url "delete-order-item-view" item.id %}" hx-target="#order-items-container" hx-swap="innerHTML" class="btn btn-m" type="button" style="background: rgb(25,12,101);color: rgb(255,255,255);;">Delete</button></form></td>
+                        <td>{{item.menu_item.product.name}} {{item.menu_item.product.unit}} {{item.menu_item.product.size}}</td>
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.order.table.name}}</td>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

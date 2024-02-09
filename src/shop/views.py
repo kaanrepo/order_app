@@ -29,6 +29,17 @@ class ActiveDashboardView(View):
         return render(request, 'pages/new_home.html', context=context)
 
 
+class PartialOrderItemsListDeleteView(View):
+    def get(self, request):
+        order = request.order
+        order_items = order.orderitem_set.all()
+        context={
+            'order': order,
+            'order_items': order_items
+        }
+        return render(request, 'partials/order_items_list_delete.html', context)
+
+
 class OrderDetailView(View):
     """View for order details."""
 

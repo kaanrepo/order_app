@@ -17,6 +17,9 @@
                         <button class="btn btn-primary" style="margin-right: 10px;margin-left: 10px;" hx-target="#order-items-container" hx-get="{% url 'menu-category-list-view' %}" hx-trigger="click" hx-swap="innerHTML">
                             Add Item
                         </button>
+                        <button class="btn btn-primary" style="margin-right: 10px;margin-left: 10px;" hx-target="#order-items-container" hx-get="{% url 'partial-order-items-list-delete-view' %}" hx-trigger="click" hx-swap="innerHTML">
+                            Delete Item
+                        </button>
                         <button class="btn btn-primary" style="margin-right: 10px;margin-left: 10px;" hx-post="{% url 'finalize-order-view' order.id %}" hx-trigger="click" hx-swap="none" id="finalizeOrderButton">
                             Finalize Order
                         </button>
