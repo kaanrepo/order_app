@@ -83,15 +83,15 @@ class Table(models.Model):
     name = models.CharField(max_length=50, unique=True)
     in_use = models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True)
-    handle = models.SlugField(null=True, blank=True)
+    # handle = models.SlugField(null=True, blank=True)  DOES NOT NEED A HANDLE
 
     def __str__(self):
         return f"{self.name}"
 
-    def save(self, *args, **kwargs):
-        if not self.handle:
-            self.handle = slugify(self.name)
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.handle:
+    #         self.handle = slugify(self.name)
+    #     super().save(*args, **kwargs)
 
 
 class OrderItem(models.Model):

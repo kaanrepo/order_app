@@ -451,3 +451,41 @@ class MenuItemListView2(View):
             'items': qs
         }
         return render(request, 'partials/menu_items_list.html', context=context)
+    
+
+class ProductProfileView(View):
+    """View for Product and MenuItem in a single view"""
+
+    def get(self, request, pk):
+        product = Product.objects.get(id=pk)
+        menu_item = MenuItem.objects.get(product=product)
+        context = {
+            'product': product,
+            'menu_item': menu_item
+        }
+        return render(request, 'pages/product_profile_page.html', context)
+    
+
+class ProductProfileEditView(View):
+
+    def get(self, request, pk):
+        product = Product.objects.get(id=pk)
+        menu_item = MenuItem.objects.get(product=product)
+        product_form = ProductForm(instance=product)
+        menu_item_form = MenuItemForm(instance=menu_item)
+
+        context = {
+            'product_form': product_form,
+            'menu_item_form': menu_item_form
+        }
+        return render(request, 'forms/product_profile_forms.html', context)
+    
+    def post(self, request, pk):
+        product = Product.objects.get(id=pk)
+        menu_item = MenuItem.objects.get(product=product)
+        product_form = ProductForm(request.POST, instance=product)
+        menu_item_form = MenuItemForm(request.POST, instance=menu_item)
+        if all([product_form.is_valid(), menu_item_form.is_valid()]):
+            product_form.save()
+            menu_item_form.save()
+            return redirect('product-profile-view', product.id)

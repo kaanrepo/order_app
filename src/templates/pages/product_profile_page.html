@@ -1,0 +1,65 @@
+{% extends "main/new_base.html" %}
+
+<h1>Product Details</h1>
+
+
+
+<p>{{product.name}} {{product.unit}} {{product.size}}</p>
+
+<hr>
+
+<h1>Menu Item Details</h1>
+
+<p>{{menu_item.category}} {{menu_item.price}} {{menu_item.is_active}}</p>
+
+
+{% block content %}
+
+<div class="col">
+    <div class="card shadow mb-3">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">{{product.name|title}}</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <h4>Description</h4>
+                    <p>Paragraph</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h4 class="fw-bold">Unit</h4>
+                    <p class="fw-semibold">{{product.unit}}</p>
+                </div>
+                <div class="col">
+                    <h4 class="fw-bold">Size</h4>
+                    <p class="fw-semibold">{{product.size}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-3">
+        <div class="card-header py-3">
+            <h6 class="text-primary fw-bold m-0">Menu Item Details</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <h4 class="fw-bold">Category#</h4>
+                    <p class="fw-semibold">{{menu_item.category}}</p>
+                </div>
+                <div class="col">
+                    <h4 class="fw-bold">Price</h4>
+                    <p class="fw-semibold">{{menu_item.price}}</p>
+                </div>
+                <div class="col">
+                    <h4 class="fw-bold">Active</h4>
+                    <p class="fw-semibold">{{product.size}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

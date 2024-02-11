@@ -41,7 +41,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-        exclude = ['image', 'image2']
+        exclude = ['image', 'image2', 'handle']
 
 class MenuCategoryForm(forms.ModelForm):
     class Meta:
@@ -52,3 +52,4 @@ class MenuItemForm(forms.ModelForm):
     class Meta:
         model = MenuItem
         fields = '__all__'
+        exclude= ['handle']

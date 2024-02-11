@@ -5,7 +5,8 @@ from .views import (home, ActiveDashboardView, OrderDetailView, MenuCategoryList
                        ProductDetailView, ProductListView, ProductCreateView, ProductUpdateView, ProductDeleteView,
                        MenuCategoryCreateView, MenuCategoryUpdateView, MenuCategoryDeleteView,MenuCategoryDetailView,
                        MenuItemCreateView, MenuItemUpdateView, MenuItemDeleteView, MenuItemDetailView, MenuItemListView,
-                       PartialOrderItemsListDeleteView, SwitchOrderTableView, PaidOrderView, PartialOrderItemsListView)
+                       PartialOrderItemsListDeleteView, SwitchOrderTableView, PaidOrderView, PartialOrderItemsListView, ProductProfileView,
+                       ProductProfileEditView)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -23,7 +24,9 @@ urlpatterns = [
 
     ### Product URLs
     path('products/', ProductListView.as_view(), name='product-list-view'),
-    path('products/<int:product_id>/', ProductDetailView.as_view(), name='product-detail-view'),
+    #path('products/<int:product_id>/', ProductDetailView.as_view(), name='product-detail-view'),
+    path('products/<int:pk>/',ProductProfileView.as_view(), name='product-profile-view'),
+    path('products/<int:pk>/edit/',ProductProfileEditView.as_view(), name='product-profile-edit-view'),
     path('products/create/', ProductCreateView.as_view(), name='product-create-view'),
     path('products/update/<int:product_id>/', ProductUpdateView.as_view(), name='product-update-view'),
     path('products/delete/<int:product_id>/', ProductDeleteView.as_view(), name='product-delete-view'),
