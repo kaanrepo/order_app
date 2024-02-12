@@ -456,8 +456,8 @@ class MenuItemListView2(View):
 class ProductProfileView(View):
     """View for Product and MenuItem in a single view"""
 
-    def get(self, request, pk):
-        product = Product.objects.get(id=pk)
+    def get(self, request, handle:str):
+        product = Product.objects.get(handle=handle)
         menu_item = MenuItem.objects.get(product=product)
         context = {
             'product': product,
@@ -468,8 +468,8 @@ class ProductProfileView(View):
 
 class ProductProfileEditView(View):
 
-    def get(self, request, pk):
-        product = Product.objects.get(id=pk)
+    def get(self, request, handle:str):
+        product = Product.objects.get(handle=handle)
         menu_item = MenuItem.objects.get(product=product)
         product_form = ProductForm(instance=product)
         menu_item_form = MenuItemForm(instance=menu_item)
@@ -489,3 +489,38 @@ class ProductProfileEditView(View):
             product_form.save()
             menu_item_form.save()
             return redirect('product-profile-view', product.id)
+        
+
+class ProductProfileCreateView(View):
+    def get(self, request):
+        product_form = ProductForm()
+        menu_item_form = MenuItemForm()
+        context = {
+            'product_form': product_form,
+            'menu_item_form': menu_item_form
+        }
+        return render(request, 'pages/product_create_page.html', context)
+    
+    def post(self, request):
+        product_form = ProductForm(request.POST)
+        menu_item_form = MenuItemForm(request.POST)
+        if all([product_form.is_valid(), menu_item_form.is_valid()]):
+            product = product_form.save()
+            menu_item = menu_item_form.save(commit=False)
+            menu_item.product = product
+            menu_item.save()
+            return redirect('product-profile-view', product.handle)
+        context = {
+            'product_form': product_form,
+            'menu_item_form': menu_item_form
+        }
+        return render(request, 'partials/messages_template.html', context)
+    
+
+class ProductProfileDeleteView(View):
+    def post(self, request, handle:str):
+        product = Product.objects.get(handle=handle)
+        menu_item = MenuItem.objects.get(product=product)
+        product.delete()
+        menu_item.delete()
+        return redirect('product-list-view')

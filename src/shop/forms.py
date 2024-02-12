@@ -52,4 +52,4 @@ class MenuItemForm(forms.ModelForm):
     class Meta:
         model = MenuItem
         fields = '__all__'
-        exclude= ['handle']
+        exclude= ['handle', 'product']
