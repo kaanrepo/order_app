@@ -2,22 +2,6 @@
 
 {% block content %}
 
-
-<form method="POST">
-    {% csrf_token %}
-
-<h1>Product Form</h1>
-
-{% include "forms/product_form.html" %}
-
-<hr>
-
-<h1>Menu Item Form</h1>
-
-{% include "forms/menu_item_form.html" %}
-
-<button type="submit">Submit</button>
-</form>
-
-
+    {% include "partials/product_create_edit_forms.html" %}
+    
 {% endblock content %}

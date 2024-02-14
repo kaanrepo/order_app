@@ -5,8 +5,11 @@
         </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
-            <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url "product-list-view" %}"><i class="fas fa-table"></i><span>Table</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "product-list-view" %}"><i class="fas fa-table"></i><span>Products</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "product-create-view" %}"><i class="fas fa-frog"></i><span>Add Product</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "tables-by-section-view" %}"><i class="fas fa-atom"></i><span>Tables</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "create-table-view" %}"><i class="fas fa-kiwi-bird"></i><span>Add Table</span></a></li>
         </ul>
         <div class="text-center d-none d-md-inline"></div>
     </div>

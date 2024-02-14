@@ -6,7 +6,7 @@ from .views import (home, ActiveDashboardView, OrderDetailView, MenuCategoryList
                        MenuCategoryCreateView, MenuCategoryUpdateView, MenuCategoryDeleteView,MenuCategoryDetailView,
                        MenuItemCreateView, MenuItemUpdateView, MenuItemDeleteView, MenuItemDetailView, MenuItemListView,
                        PartialOrderItemsListDeleteView, SwitchOrderTableView, PaidOrderView, PartialOrderItemsListView, ProductProfileView,
-                       ProductProfileEditView, ProductProfileCreateView, ProductProfileDeleteView)
+                       ProductProfileEditView, ProductProfileCreateView, ProductProfileDeleteView,TablesbySectionView, CreateTableViev)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -18,7 +18,10 @@ urlpatterns = [
     path('order_item/create/<int:item_id>/', OrderItemCreateView.as_view(), name='order-item-create-view'),
     path('order_item/deliver/<int:item_id>/', DeliverOrderItemView.as_view(), name='deliver-order-item-view'),
     path('order_item/delete/<int:item_id>/', DeleteOrderItemView.as_view(), name='delete-order-item-view'),
-    path('tables/', AvailableTablesView.as_view(), name='available-tables-view'),
+    path('tables/', TablesbySectionView.as_view(), name='tables-by-section-view'),
+    path('tables/create/', CreateTableViev.as_view(), name='create-table-view'),
+    path('tables/available/', AvailableTablesView.as_view(), name='available-tables-view'),
+
     path('tables/activate/<int:table_id>/', ActivateTableOrderView.as_view(), name='activate-table-order-view'),
     path('tables/switch/<int:table_id>/', SwitchOrderTableView.as_view(), name='switch-table-order-view'),
 
@@ -26,8 +29,9 @@ urlpatterns = [
     path('products/', ProductListView.as_view(), name='product-list-view'),
     #path('products/<int:product_id>/', ProductDetailView.as_view(), name='product-detail-view'),
     path('products/create/', ProductProfileCreateView.as_view(), name='product-create-view'),
+
     path('products/<slug:handle>/',ProductProfileView.as_view(), name='product-profile-view'),
-    path('products/<slug:handle>/edit/',ProductProfileEditView.as_view(), name='product-profile-edit-view'),
+    path('products/<slug:handle>/edit',ProductProfileEditView.as_view(), name='product-profile-edit-view'),
     path('products/<slug:handle>/delete/',ProductProfileDeleteView.as_view(), name='product-profile-delete-view'),
 
     path('products/update/<int:product_id>/', ProductUpdateView.as_view(), name='product-update-view'),

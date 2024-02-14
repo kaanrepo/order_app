@@ -53,3 +53,9 @@ class MenuItemForm(forms.ModelForm):
         model = MenuItem
         fields = '__all__'
         exclude= ['handle', 'product']
+
+class TableForm(forms.ModelForm):
+    class Meta:
+        model = Table
+        fields = '__all__'
+        exclude = ['in_use']

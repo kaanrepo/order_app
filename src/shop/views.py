@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product
-from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm
+from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product, Section
+from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm, TableForm
 from django.contrib import messages
 
 
@@ -168,7 +168,14 @@ class ActivateTableOrderView(View):
         table.save()
         order = Order.objects.create(table=table)
         order.save()
+        active_orders = Order.objects.filter(is_finished=False)
+        context = {
+            'active_orders': active_orders
+        }
+
+        return render(request, "partials/open_orders_list.html", context)
         return redirect('home-view')
+
     
 class DeliverOrderItemView(View):
     """View for delivering order item."""
@@ -468,6 +475,16 @@ class ProductProfileView(View):
 
 class ProductProfileEditView(View):
 
+    def post(self, request, handle:str):
+        product = Product.objects.get(handle=handle)
+        menu_item = MenuItem.objects.get(product=product)
+        product_form = ProductForm(request.POST, instance=product)
+        menu_item_form = MenuItemForm(request.POST, instance=menu_item)
+        if all([product_form.is_valid(), menu_item_form.is_valid()]):
+            product_form.save()
+            menu_item_form.save()
+            return redirect('product-profile-view', product.handle)
+        
     def get(self, request, handle:str):
         product = Product.objects.get(handle=handle)
         menu_item = MenuItem.objects.get(product=product)
@@ -476,20 +493,12 @@ class ProductProfileEditView(View):
 
         context = {
             'product_form': product_form,
-            'menu_item_form': menu_item_form
+            'menu_item_form': menu_item_form,
+            'product': product,
         }
-        return render(request, 'forms/product_profile_forms.html', context)
+        return render(request, 'partials/product_create_edit_forms.html', context)
     
-    def post(self, request, pk):
-        product = Product.objects.get(id=pk)
-        menu_item = MenuItem.objects.get(product=product)
-        product_form = ProductForm(request.POST, instance=product)
-        menu_item_form = MenuItemForm(request.POST, instance=menu_item)
-        if all([product_form.is_valid(), menu_item_form.is_valid()]):
-            product_form.save()
-            menu_item_form.save()
-            return redirect('product-profile-view', product.id)
-        
+
 
 class ProductProfileCreateView(View):
     def get(self, request):
@@ -524,3 +533,34 @@ class ProductProfileDeleteView(View):
         product.delete()
         menu_item.delete()
         return redirect('product-list-view')
+    
+
+class TablesbySectionView(View):
+    def get(self, request):
+        tables_by_section = [table              
+                            for section in Section.objects.all() 
+                            for table in section.table_set.all()]
+        tables_by_section = {section:section.table_set.all() for section in Section.objects.all()}
+        context ={
+            'tables_by_section': tables_by_section
+        }
+        return render(request, 'pages/tables_by_section_page.html', context=context)
+
+
+class CreateTableViev(View):
+    def get(self, request):
+        form = TableForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'forms/object_form.html', context=context)
+    
+    def post(self, request):
+        form = TableForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tables-by-section-view')
+        context = {
+            'form': form
+        }
+        return render(request, 'forms/object_form.html', context=context)
