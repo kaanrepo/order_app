@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product, Section
-from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm, TableForm
+from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm, TableForm, SectionForm
 from django.contrib import messages
 
 
@@ -130,6 +130,16 @@ class OrderItemCreateView(View):
             return render(request, 'partials/order_items_list.html', context)
 
 
+class OpenOrdersView(View):
+    """View for open orders."""
+
+    def get(self, request):
+        active_orders = Order.objects.filter(is_finished=False)
+        context = {
+            'active_orders': active_orders
+        }
+        return render(request, 'partials/open_orders_list.html', context=context)
+
 class AvailableTablesView(View):
     """View for available tables."""
 
@@ -174,7 +184,8 @@ class ActivateTableOrderView(View):
         }
 
         return render(request, "partials/open_orders_list.html", context)
-        return redirect('home-view')
+    
+
 
     
 class DeliverOrderItemView(View):
@@ -545,9 +556,27 @@ class TablesbySectionView(View):
             'tables_by_section': tables_by_section
         }
         return render(request, 'pages/tables_by_section_page.html', context=context)
+    
+class SectionCreateView(View):
+    def get(self, request):
+        context = {
+            'form': SectionForm()
+        }
+        return render(request, 'forms/object_form.html', context=context)
+    
+    def post(self, request):
+        form = SectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tables-by-section-view')
+        context = {
+            'form': form
+        }
+        return render(request, 'forms/object_form.html', context=context)
+    
 
 
-class CreateTableViev(View):
+class CreateTableView(View):
     def get(self, request):
         form = TableForm()
         context = {
@@ -564,3 +593,50 @@ class CreateTableViev(View):
             'form': form
         }
         return render(request, 'forms/object_form.html', context=context)
+    
+
+class TableDetailView(View):
+    def get(self, request, table_id:int):
+        table = Table.objects.get(id=table_id)
+        form = TableForm(instance=table)
+        context = {
+            'table': table,
+            'form': form
+        }
+        return render(request, 'pages/table_detail_page.html', context=context)
+    
+
+class TableEditView(View):
+    def get(self, request, table_id:int):
+        table = Table.objects.get(id=table_id)
+        form = TableForm(instance=table)
+        context = {
+            'table': table,
+            'form': form
+        }
+        return render(request, 'forms/table_edit_form.html', context=context)
+    
+    def post(self, request, table_id:int):
+        table = Table.objects.get(id=table_id)
+        form = TableForm(request.POST, instance=table)
+        if form.is_valid():
+            form.save()
+            return redirect('tables-by-section-view')
+        context = {
+            'table': table,
+            'form': form
+        }
+        return render(request, 'partials/table_detail.html', context=context)
+
+class HistoricalOrdersView(View):
+    def get(self, request):
+        orders = Order.objects.all().order_by('-created')
+        q = request.GET.get('q')
+        if q:
+            orders = orders.search(q)
+        context = {
+            'orders': orders
+        }
+        if request.htmx:
+            return render(request, 'partials/historical_orders_list.html', context)
+        return render(request, 'pages/historical_orders_page.html', context)

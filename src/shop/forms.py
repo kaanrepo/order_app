@@ -1,5 +1,5 @@
 from django import forms
-from .models import Table, Order, OrderItem, Product, MenuItem, MenuCategory
+from .models import Table, Order, OrderItem, Product, MenuItem, MenuCategory, Section
 from django.urls import reverse
 
 class InactiveTableForm(forms.Form):
@@ -59,3 +59,8 @@ class TableForm(forms.ModelForm):
         model = Table
         fields = '__all__'
         exclude = ['in_use']
+
+class SectionForm(forms.ModelForm):
+    class Meta:
+        model = Section
+        fields = '__all__'

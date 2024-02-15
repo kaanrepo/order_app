@@ -1,11 +1,12 @@
 <nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="background: rgb(0,3,13);">
     <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/">
-            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-utensils"></i></div>
-            <div class="sidebar-brand-text mx-3"><span>Kaan</span></div>
+            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-horse-head"></i></div>
+            <div class="sidebar-brand-text mx-3"><span>Orderly</span></div>
         </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
             <li class="nav-item"><a class="nav-link" href="/"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url "historical-orders-view" %}"><i class="fas fa-history"></i><span>Orders</span></a></li>
             <li class="nav-item"><a class="nav-link" href="{% url "product-list-view" %}"><i class="fas fa-table"></i><span>Products</span></a></li>
             <li class="nav-item"><a class="nav-link" href="{% url "product-create-view" %}"><i class="fas fa-frog"></i><span>Add Product</span></a></li>
             <li class="nav-item"><a class="nav-link" href="{% url "tables-by-section-view" %}"><i class="fas fa-atom"></i><span>Tables</span></a></li>

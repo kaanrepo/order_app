@@ -1,0 +1,9 @@
+<form method="POST" action={% url "table-edit-view" table.id %}>
+    {% csrf_token %}
+
+<h1>Table Form</h1>
+
+{{form.as_p}}
+
+<button type="submit">Submit</button>
+</form>

@@ -15,7 +15,7 @@
             <div class="card-body">
                 <ul>
                     {% for table in tables  %}
-                        <li>{{table.name}}</li>
+                        <li><a href={% url "table-detail-view" table.id %}> {{table.name}}</a></li>
                     {% endfor %}
                 </ul>
             </div>

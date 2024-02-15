@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 import random
 import string
+from django.db.models import Q
 
 UNIT_CHOICES = [
     ('draft', 'Draft'),
@@ -12,6 +13,17 @@ UNIT_CHOICES = [
     ('plate', 'Plate'),
 ]
 
+
+class ProductManager(models.Manager):
+    """Manager for Product model."""
+
+    def search(self, query):
+        """Search for product."""
+        return self.filter(
+            Q(name__icontains=query) |
+            Q(size__icontains=query) |
+            Q(unit__icontains=query)
+        ).distinct()
 
 class Product(models.Model):
     """Model for product in the shop."""
@@ -24,6 +36,8 @@ class Product(models.Model):
     handle = models.SlugField(null=True, blank=True)
     image = models.ImageField(upload_to='product', blank=True, null=True)
     image2 = models.ImageField(upload_to='product', blank=True, null=True)
+
+    objects = ProductManager()
 
     class Meta:
         """Meta definition for Product."""
@@ -114,6 +128,23 @@ class OrderItem(models.Model):
         return f"{self.menu_item.product.name} x {self.quantity}"
 
 
+class OrderQuerySet(models.QuerySet):
+    def search(self, query):
+        """Search for order."""
+        return self.filter(
+            Q(id__icontains=query) |
+            Q(table__name__icontains=query)|
+            Q(created__icontains=query)
+        ).distinct()
+
+
+class OrderManager(models.Manager):
+    """Manager for Order model."""
+    def get_queryset(self):
+        """Search for order."""
+        return OrderQuerySet(self.model, using=self._db)
+
+
 class Order(models.Model):
     """Model for order."""
 
@@ -122,6 +153,8 @@ class Order(models.Model):
     updated = models.DateTimeField(auto_now=True)
     is_finished = models.BooleanField(default=False)
     is_paid = models.BooleanField(default=False)
+
+    objects = OrderManager()
 
     @property
     def total_bill(self):
