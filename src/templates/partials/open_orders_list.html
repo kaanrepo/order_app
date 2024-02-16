@@ -24,7 +24,7 @@
                             <td><a href={% url "order-detail-view" order.id %}>{{order.table.name}}<a/></td>
                             <td>{{order.created|date:"P"}}</td>
                             <td>{{order.is_paid|yesno|title}}</td>
-                            <td>{{order.total_bill|yesno|title}}<br /></td>
+                            <td>{{order.total_bill}} TL</td>
                         </tr>
                     {% endfor %}
                 </tbody>

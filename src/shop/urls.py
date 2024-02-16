@@ -4,7 +4,7 @@ from .views import (ActiveDashboardView, OrderDetailView, MenuCategoryListView, 
                     ProductListView, ProductUpdateView, ProductDeleteView, OpenOrdersView,
                     MenuCategoryCreateView, MenuItemListView, MenuCategoryUpdateView, MenuCategoryDeleteView,
                     PartialOrderItemsListDeleteView, SwitchOrderTableView, PaidOrderView, PartialOrderItemsListView, ProductProfileView,
-                    ProductProfileEditView, ProductProfileCreateView, ProductProfileDeleteView, TablesbySectionView, CreateTableView, HistoricalOrdersView, TableEditView, TableDetailView, SectionCreateView)
+                    ProductProfileEditView, ProductProfileCreateView, ProductProfileDeleteView, TablesbySectionView, CreateTableView, HistoricalOrdersView, TableEditView, TableDetailView, SectionCreateView, SectionListView, SectionDetailView)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -29,6 +29,8 @@ urlpatterns = [
     path('tables/switch/<int:table_id>/', SwitchOrderTableView.as_view(), name='switch-table-order-view'),
 
     ### Section URLs
+    path('section/', SectionListView.as_view(), name='section-list-view'),
+    path('section/<int:section_id>/', SectionDetailView.as_view(), name='section-detail-view'),
     path('section/create/', SectionCreateView.as_view(), name='section-create-view'),
 
     ### Product URLs

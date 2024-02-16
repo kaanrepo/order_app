@@ -1,0 +1,19 @@
+{% extends "main/new_base.html" %}
+
+{% block content %}
+
+{% for section, tables in qs.items %}
+
+<h1>{{ section.name }}</h1>
+
+<ul>
+{% for table in tables %}
+<li>{{table.name}}</li>
+
+{% endfor %}
+</ul>
+
+
+{% endfor %}
+
+{% endblock content %}

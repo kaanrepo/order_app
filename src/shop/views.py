@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product, Section
 from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm, TableForm, SectionForm
@@ -54,7 +54,7 @@ class OrderDetailView(View):
     """View for order details."""
 
     def get(self, request, order_id:int):
-        order = Order.objects.get(id=order_id)
+        order = get_object_or_404(Order, id=order_id)
         order_items = order.orderitem_set.all()
         context = {
             'order': order,
@@ -252,7 +252,7 @@ class ProductDetailView(View):
     """View for product details."""
 
     def get(self, request, product_id):
-        product = Product.objects.get(id=product_id)
+        product = get_object_or_404(Product, id=product_id)
         context = {
             'product': product
         }
@@ -384,7 +384,7 @@ class MenuCategoryDetailView(View):
     """View for menu category details."""
 
     def get(self, request, category_id):
-        category = MenuCategory.objects.get(id=category_id)
+        category = get_object_or_404(MenuCategory, id=category_id)
         context = {
             'category': category
         }
@@ -454,7 +454,7 @@ class MenuItemDetailView(View):
     """View for menu item details."""
 
     def get(self, request, item_handle):
-        item = MenuItem.objects.get(handle=item_handle)
+        item = get_object_or_404(MenuItem, handle=item_handle)
         context = {
             'item': item
         }
@@ -556,7 +556,23 @@ class TablesbySectionView(View):
             'tables_by_section': tables_by_section
         }
         return render(request, 'pages/tables_by_section_page.html', context=context)
-    
+
+class SectionListView(View):
+    def get(self, request):
+        qs = { section : section.table_set.all() for section in Section.objects.all() }
+        context = {
+            'qs': qs
+        }
+        return render(request, 'pages/section_list_page.html', context)
+
+class SectionDetailView(View):
+    def get(self, request, section_id:int):
+        section = get_object_or_404(Section, id=section_id)
+        context = {
+            'section': section
+        }
+        return render(request, 'pages/section_detail_page.html', context)
+
 class SectionCreateView(View):
     def get(self, request):
         context = {
@@ -597,7 +613,7 @@ class CreateTableView(View):
 
 class TableDetailView(View):
     def get(self, request, table_id:int):
-        table = Table.objects.get(id=table_id)
+        table = get_object_or_404(Table, id=table_id)
         form = TableForm(instance=table)
         context = {
             'table': table,
@@ -608,7 +624,7 @@ class TableDetailView(View):
 
 class TableEditView(View):
     def get(self, request, table_id:int):
-        table = Table.objects.get(id=table_id)
+        table = get_object_or_404(Table, id=table_id)
         form = TableForm(instance=table)
         context = {
             'table': table,
@@ -617,7 +633,7 @@ class TableEditView(View):
         return render(request, 'forms/table_edit_form.html', context=context)
     
     def post(self, request, table_id:int):
-        table = Table.objects.get(id=table_id)
+        table = get_object_or_404(Table, id=table_id)
         form = TableForm(request.POST, instance=table)
         if form.is_valid():
             form.save()
