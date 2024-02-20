@@ -9,7 +9,7 @@
 </div>
 <script>
     document.getElementById('deleteProductButton').addEventListener('htmx:afterOnLoad', function() {
-        window.location.href = "{% url "home-view" %}";  // Redirect to homeview after product deletion
+        window.location.href = "{% url "product-list-view" %}";  // Redirect to product list view after product deletion
     });
 </script>
 {% endblock content %}

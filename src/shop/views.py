@@ -3,6 +3,7 @@ from django.views import View
 from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product, Section
 from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm, TableForm, SectionForm
 from django.contrib import messages
+from django.utils import timezone
 
 
 # Create your views here.
@@ -16,12 +17,19 @@ class ActiveDashboardView(View):
     """Home View that includes active orders and undelivered items."""
 
     def get(self, request):
+        today = timezone.now().date()
+        active_orders_today = Order.objects.filter(is_finished=False, created__date=today)
         active_orders = Order.objects.filter(is_finished=False)
         undelivered_items = OrderItem.objects.filter(
             order__is_finished=False, is_delivered=False)
+        delivered_items_today = OrderItem.objects.filter(
+            is_delivered=True, created__date=today
+        )
         context = {
             'active_orders': active_orders,
-            'undelivered_items': undelivered_items
+            'undelivered_items': undelivered_items,
+            'active_orders_today': active_orders_today,
+            'delivered_items_today': delivered_items_today,
         }
         try:
             del request.session['order_id']
@@ -643,6 +651,12 @@ class TableEditView(View):
             'form': form
         }
         return render(request, 'partials/table_detail.html', context=context)
+    
+class TableDeleteView(View):
+    def post(self, request, table_id:int):
+        table = get_object_or_404(Table, id=table_id)
+        table.delete()
+        return redirect('tables-by-section-view')
 
 class HistoricalOrdersView(View):
     def get(self, request):

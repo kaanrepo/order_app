@@ -4,7 +4,7 @@ from .views import (ActiveDashboardView, OrderDetailView, MenuCategoryListView, 
                     ProductListView, ProductUpdateView, ProductDeleteView, OpenOrdersView,
                     MenuCategoryCreateView, MenuItemListView, MenuCategoryUpdateView, MenuCategoryDeleteView,
                     PartialOrderItemsListDeleteView, SwitchOrderTableView, PaidOrderView, PartialOrderItemsListView, ProductProfileView,
-                    ProductProfileEditView, ProductProfileCreateView, ProductProfileDeleteView, TablesbySectionView, CreateTableView, HistoricalOrdersView, TableEditView, TableDetailView, SectionCreateView, SectionListView, SectionDetailView)
+                    ProductProfileEditView, ProductProfileCreateView, ProductProfileDeleteView, TablesbySectionView, CreateTableView, HistoricalOrdersView, TableEditView, TableDetailView, SectionCreateView, SectionListView, SectionDetailView,TableDeleteView)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -25,6 +25,7 @@ urlpatterns = [
     path('tables/<int:table_id>/edit/', TableEditView.as_view(), name='table-edit-view'),
     path('tables/create/', CreateTableView.as_view(), name='create-table-view'),
     path('tables/available/', AvailableTablesView.as_view(), name='available-tables-view'),
+    path('tables/delete/<int:table_id>/', TableDeleteView.as_view(), name='table-delete-view'),
     path('tables/activate/<int:table_id>/', ActivateTableOrderView.as_view(), name='activate-table-order-view'),
     path('tables/switch/<int:table_id>/', SwitchOrderTableView.as_view(), name='switch-table-order-view'),
 

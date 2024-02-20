@@ -28,9 +28,14 @@
         <div class="card shadow border-start-primary py-2" style="background: #dddddd;width: 185px;height: 73px; margin-right:20px;">
             <div class="card-body text-center d-flex justify-content-sm-end" style="margin-top: -7px;">
                 <button class="btn btn-warning" hx-target="#table-profile-container" hx-swap="innerHTML" hx-get={% url "table-edit-view" table.id %} type="button" style="margin-right: 5px;margin-left: 5px;">Edit</button>
-                {% comment %} <form>{% csrf_token %}<button id="deleteProductButton" class="btn btn-dark" type="button" hx-post={% url "product-profile-delete-view" product.handle %} hx-boost="true" hx-confirm="Are you sure you want to delete {{product.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div> {% endcomment %}
+                <form>{% csrf_token %}<button id="deleteTableButton" class="btn btn-dark" type="button" hx-post={% url "table-delete-view" table.id %} hx-boost="true" hx-confirm="Are you sure you want to delete {{product.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div>
         </div>
     </div>
 </div>
 
 
+<script>
+    document.getElementById('deleteTableButton').addEventListener('htmx:afterOnLoad', function() {
+        window.location.href = "{% url "tables-by-section-view" %}";  // Redirect to product list view after product deletion
+    });
+</script>
