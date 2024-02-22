@@ -1,4 +1,4 @@
-<form method="POST" action="{% url "product-profile-edit-view" product.handle %}">
+<form method="POST" action="{% url "product-profile-edit-view" product.handle %}" enctype="multipart/form-data">
     {% csrf_token %}
 
 <h1>Product Form</h1>

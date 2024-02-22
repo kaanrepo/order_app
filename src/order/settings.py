@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'accounts',
     'shop',
     'django_htmx',
+    ### third party apps
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -130,15 +132,27 @@ STATIC_ROOT = BASE_DIR / 'static-root'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
-STORAGES = {
-    'default': {
-        "BACKEND": 'django.core.files.storage.FileSystemStorage',
-    },
-    'staticfiles': {
-        "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+# STORAGES = {
+#     'default': {
+#         "BACKEND": "storages.backends.s3.S3Storage",
+#     },
+#     'staticfiles': {
+#         "BACKEND": 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+#     },
+# }
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+#MEDIA_URL = '/media/'
+
+AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default=None, cast=str)
+AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default=None, cast=str)
+AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default=None, cast=str)
+
+MEDIA_URL = f'https://{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

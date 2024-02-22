@@ -4,6 +4,14 @@ import random
 import string
 from django.db.models import Q
 
+def product_image_upload_path(instance, filename):
+    """Generate upload path for image."""
+    return f'product/{instance.id}/{filename}'
+
+def category_image_upload_path(instance, filename):
+    """Generate upload path for image."""
+    return f'category/{instance.id}/{filename}'
+
 UNIT_CHOICES = [
     ('draft', 'Draft'),
     ('bottle', 'Bottle'),
@@ -34,8 +42,8 @@ class Product(models.Model):
         max_length=50, choices=UNIT_CHOICES, default='draft')
     size = models.CharField(max_length=50)
     handle = models.SlugField(null=True, blank=True)
-    image = models.ImageField(upload_to='product', blank=True, null=True)
-    image2 = models.ImageField(upload_to='product', blank=True, null=True)
+    image = models.ImageField(upload_to=product_image_upload_path, blank=True, null=True)
+    image2 = models.ImageField(upload_to='product/', blank=True, null=True)
 
     objects = ProductManager()
 
@@ -50,6 +58,15 @@ class Product(models.Model):
         if not self.handle:
             slug_string = '-'.join([self.name, self.size, self.unit])
             self.handle = slugify(slug_string)
+
+        if self.id is not None:
+            super().save(*args, **kwargs)
+        
+        temp_image = self.image
+        self.image = None
+        super().save(*args, **kwargs)
+
+        self.image = temp_image
         super().save(*args, **kwargs)
 
     def get_prefix(self):
@@ -62,7 +79,7 @@ class MenuCategory(models.Model):
     name = models.CharField(max_length=50, unique=True)
     handle = models.SlugField(null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='category', blank=True, null=True)
+    image = models.ImageField(upload_to=category_image_upload_path, blank=True, null=True)
 
     def __str__(self):
         return f"{self.name}"
@@ -70,6 +87,15 @@ class MenuCategory(models.Model):
     def save(self, *args, **kwargs):
         if not self.handle:
             self.handle = slugify(self.name)
+
+        if self.id is not None:
+            super().save(*args, **kwargs)
+        
+        temp_image = self.image
+        self.image = None
+        super().save(*args, **kwargs)
+
+        self.image = temp_image
         super().save(*args, **kwargs)
 
     def get_prefix(self):

@@ -342,7 +342,7 @@ class MenuCategoryCreateView(View):
         return render(request, 'forms/object_form.html', context=context)
 
     def post(self, request):
-        form = MenuCategoryForm(request.POST)
+        form = MenuCategoryForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('menu-category-list-view')
@@ -499,7 +499,7 @@ class ProductProfileEditView(View):
     def post(self, request, handle:str):
         product = Product.objects.get(handle=handle)
         menu_item = MenuItem.objects.get(product=product)
-        product_form = ProductForm(request.POST, instance=product)
+        product_form = ProductForm(request.POST, request.FILES, instance=product)
         menu_item_form = MenuItemForm(request.POST, instance=menu_item)
         if all([product_form.is_valid(), menu_item_form.is_valid()]):
             product_form.save()
@@ -532,7 +532,7 @@ class ProductProfileCreateView(View):
         return render(request, 'pages/product_create_page.html', context)
     
     def post(self, request):
-        product_form = ProductForm(request.POST)
+        product_form = ProductForm(request.POST, request.FILES)
         menu_item_form = MenuItemForm(request.POST)
         if all([product_form.is_valid(), menu_item_form.is_valid()]):
             product = product_form.save()

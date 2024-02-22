@@ -6,3 +6,4 @@ pillow
 django-htmx
 boto3
 natsort
+django-storages[s3]
