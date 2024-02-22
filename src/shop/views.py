@@ -18,7 +18,8 @@ class ActiveDashboardView(View):
 
     def get(self, request):
         today = timezone.now().date()
-        active_orders_today = Order.objects.filter(is_finished=False, created__date=today)
+        active_orders_today = Order.objects.filter(is_finished=True, created__date=today)
+        total_gain = sum([order.total_bill for order in active_orders_today])
         active_orders = Order.objects.filter(is_finished=False)
         undelivered_items = OrderItem.objects.filter(
             order__is_finished=False, is_delivered=False)
@@ -30,6 +31,7 @@ class ActiveDashboardView(View):
             'undelivered_items': undelivered_items,
             'active_orders_today': active_orders_today,
             'delivered_items_today': delivered_items_today,
+            'total_gain': total_gain
         }
         try:
             del request.session['order_id']
@@ -88,7 +90,7 @@ class MenuItemListView(View):
 
     def get(self, request, category_handle:str):
         category = MenuCategory.objects.get(handle=category_handle)
-        items = category.menuitem_set.all()
+        items = category.menuitem_set.all().filter(is_active=True)
         context = {
             'category': category,
             'items': items
@@ -670,3 +672,14 @@ class HistoricalOrdersView(View):
         if request.htmx:
             return render(request, 'partials/historical_orders_list.html', context)
         return render(request, 'pages/historical_orders_page.html', context)
+    
+class FinishOpenOrdersView(View):
+    def post(self, request):
+        active_orders = Order.objects.filter(is_finished=False)
+        for order in active_orders:
+            order.is_finished = True
+            order.save()
+            table = order.table
+            table.in_use = False
+            table.save()
+        return render(request, 'partials/open_orders_list.html', {})

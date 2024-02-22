@@ -52,6 +52,9 @@ class Product(models.Model):
             self.handle = slugify(slug_string)
         super().save(*args, **kwargs)
 
+    def get_prefix(self):
+        return f"products/{self.id}/"
+
 
 class MenuCategory(models.Model):
     """Model for menu category."""
@@ -68,6 +71,9 @@ class MenuCategory(models.Model):
         if not self.handle:
             self.handle = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_prefix(self):
+        return f"category/{self.id}/"
 
 
 class MenuItem(models.Model):

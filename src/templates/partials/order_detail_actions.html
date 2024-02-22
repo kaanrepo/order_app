@@ -11,12 +11,12 @@
             <button class="btn btn-primary" style="padding:7px; margin:3px;" hx-target="#order-items-container" hx-get="{% url 'partial-order-items-list-delete-view' %}" hx-trigger="click" hx-swap="innerHTML">
                 Delete Item
             </button>
-            <button class="btn btn-primary" style="padding:7px; margin:3px;" hx-post="{% url 'paid-order-view' %}" hx-trigger="click" hx-target="#order-info-container">
+            {% comment %} <button class="btn btn-primary" style="padding:7px; margin:3px;" hx-post="{% url 'paid-order-view' %}" hx-trigger="click" hx-target="#order-info-container">
                 Paid
             </button>
             <button class="btn btn-primary" style="padding:7px; margin:3px;" hx-post="{% url 'finalize-order-view' order.id %}" hx-trigger="click" hx-swap="none" id="finalizeOrderButton" {% if not order.is_paid %} hx-confirm="Order is not paid. Sure to finish?"{% endif %}>
                 Finalize Order
-            </button>
+            </button> {% endcomment %}
         </form>
     </div>
 </div>
