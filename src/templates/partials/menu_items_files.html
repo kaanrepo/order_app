@@ -1,0 +1,17 @@
+{% load static %}
+
+{% for obj_dict in obj_list %}
+<div class="col" style="max-width: 200px;">
+    <div class="card">
+        {% if obj_dict.is_image %}
+        <img class="card-img-top w-100 d-block d-xxl-flex fit-cover" style="height: 200px;" src="{{obj_dict.url}}" alt={{category.name}} title={{category.name}} /> 
+        {% else %}
+        <img class="card-img-top w-100 d-block d-xxl-flex fit-cover" style="height: 200px;" src="{% static 'img/placeholder.png' %}" alt={{category.name}} title={{category.name}} />
+        {% endif %}       
+        <div class="card-body p-4">
+            <h4 class="card-title">{{obj_dict.menu_item.product.name|title}}</h4>
+            <p class="card-text">{{obj_dict.menu_item.product.description}}<br>{{obj_dict.menu_item.price}} TL</p>
+        </div>
+    </div>
+</div>
+{% endfor %}

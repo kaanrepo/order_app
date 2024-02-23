@@ -33,7 +33,9 @@ from .views import (ActivateTableOrderView,
                     TableDeleteView,
                     TableDetailView,
                     TableEditView,
-                    TablesbySectionView,)
+                    TablesbySectionView,
+                    MenuCategoryFilesView,
+                    MenuItemFilesView,)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -75,7 +77,9 @@ urlpatterns = [
     
     ### MenuCategory URLs
     path('menu/', MenuCategoryListView.as_view(), name='menu-category-list-view'),
+    path('menu/files/img/', MenuCategoryFilesView.as_view(), name='menu-category-files-view'),
     path('menu/<str:category_handle>/', MenuItemListView.as_view(), name='menu-item-list-view'),
+    path('menu/files/img/<str:category_handle>/', MenuItemFilesView.as_view(), name='menu-item-files-view'),
     path('menu-category/create/', MenuCategoryCreateView.as_view(), name='menu-category-create-view'),
     path('menu-category/update/<int:category_id>/', MenuCategoryUpdateView.as_view(), name='menu-category-update-view'),
     path('menu-category/delete/<int:category_id>/', MenuCategoryDeleteView.as_view(), name='menu-category-delete-view'),

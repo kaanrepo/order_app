@@ -4,13 +4,18 @@ from shop.models import Order, OrderItem, MenuCategory, MenuItem, Table, Product
 from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemForm, TableForm, SectionForm
 from django.contrib import messages
 from django.utils import timezone
+from django.http import HttpResponse
+import pathlib
+import mimetypes
+# Your code here
 
+### s3
+import s3
+from order.env import config
 
-# Create your views here.
-
-def home(request):
-    context = {}
-    return render(request, 'pages/home.html', context=context)
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default=None)
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default=None)
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default=None)  
 
 
 class ActiveDashboardView(View):
@@ -74,19 +79,119 @@ class OrderDetailView(View):
         return render(request, 'pages/order_detail.html', context=context)
 
 
+class MenuCategoryFilesView(View):
+    def get(self, request):
+        if not request.htmx:
+            return redirect('menu-category-list-view')
+        client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                            default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
+        paginator = client.get_paginator('list_objects_v2')
+        obj_list = []
+        categories = MenuCategory.objects.all()
+        for category in categories:
+            pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'category/{category.id}/')
+            for page in pag_gen:
+                for c in page.get('Contents', []):
+                    key = c.get('Key')
+                    size = c.get('Size')
+                    name = pathlib.Path(key).name
+                    _type = None
+                    try:
+                        _type = mimetypes.guess_type(name)[0]
+                    except:
+                        pass
+                    if size ==0:
+                        continue
+                    url = client.generate_presigned_url(
+                        'get_object',
+                        Params={
+                            'Bucket': AWS_STORAGE_BUCKET_NAME,
+                            'Key': key
+                        },
+                        ExpiresIn=1000
+                    )
+                    is_image = 'image' in _type
+                    data = {
+                        'category': category,
+                        'key': key,
+                        'size': size,
+                        'type': _type,
+                        'name': name,
+                        'is_image': is_image,
+                        'url': url
+
+                    }
+                    obj_list.append(data)
+        context = {
+            'obj_list': obj_list
+        }
+        return render(request, 'partials/menu_category_files.html', context=context)
+
 class MenuCategoryListView(View):
-    """View for menu category."""
+    """View for menu categories."""
 
     def get(self, request):
-        categories = MenuCategory.objects.all()
+        qs = MenuCategory.objects.all()
         context = {
-            'categories': categories,
+            'categories': qs
         }
-        return render(request, 'partials/menu_categories_list.html', context=context)
+        if request.htmx:
+            return render(request, 'partials/menu_categories_list.html', context=context)
+        return render(request, 'pages/menu_categories_list.html', context=context)
+    
+class MenuItemFilesView(View):
+    def get(self, request, category_handle:str):
+        if not request.htmx:
+            return redirect('menu-category-list-view')
+        client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                            default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
+        paginator = client.get_paginator('list_objects_v2')
+        obj_list = []
+        category = MenuCategory.objects.get(handle=category_handle)
+        for menu_item in category.menuitem_set.all():
+            pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'product/{menu_item.product.id}/')
+            for page in pag_gen:
+                for c in page.get('Contents', []):
+                    key = c.get('Key')
+                    size = c.get('Size')
+                    name = pathlib.Path(key).name
+                    _type = None
+                    try:
+                        _type = mimetypes.guess_type(name)[0]
+                    except:
+                        pass
+                    if size ==0:
+                        continue
+                    url = client.generate_presigned_url(
+                        'get_object',
+                        Params={
+                            'Bucket': AWS_STORAGE_BUCKET_NAME,
+                            'Key': key
+                        },
+                        ExpiresIn=1000
+                    )
+                    is_image = 'image' in _type
+                    data = {
+                        'menu_item': menu_item,
+                        'key': key,
+                        'size': size,
+                        'type': _type,
+                        'name': name,
+                        'is_image': is_image,
+                        'url': url
+
+                    }
+                    obj_list.append(data)
+        context = {
+            'obj_list': obj_list
+        }
+        return render(request, 'partials/menu_items_files.html', context=context)
 
 
 class MenuItemListView(View):
-    """View for menu item."""
+    """View for menu item based on the selected category."""
 
     def get(self, request, category_handle:str):
         category = MenuCategory.objects.get(handle=category_handle)
@@ -95,7 +200,9 @@ class MenuItemListView(View):
             'category': category,
             'items': items
         }
-        return render(request, 'partials/menu_items_list.html', context=context)
+        if request.htmx:
+            return render(request, 'partials/menu_items_list.html', context=context)
+        return render(request, 'pages/menu_items_list.html', context=context)
 
 
 class OrderItemCreateView(View):

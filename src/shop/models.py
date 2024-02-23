@@ -1,8 +1,14 @@
 from django.db import models
 from django.utils.text import slugify
-import random
-import string
 from django.db.models import Q
+from django.shortcuts import reverse
+from order.env import config
+import boto3
+
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default=None)
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default=None)
+AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME', default=None)
+
 
 def product_image_upload_path(instance, filename):
     """Generate upload path for image."""
@@ -70,7 +76,10 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
     def get_prefix(self):
-        return f"products/{self.id}/"
+        return f"product/{self.id}/"
+    
+    def get_files_url(self):
+        return reverse('product-files-view', kwargs={'id': self.id})
 
 
 class MenuCategory(models.Model):
@@ -100,7 +109,17 @@ class MenuCategory(models.Model):
 
     def get_prefix(self):
         return f"category/{self.id}/"
-
+    
+    def get_files_url(self):
+        return reverse('menu-category-files-view', kwargs={'id': self.id})
+    
+    def get_image_url(self):
+        if self.image and self.image.name:
+            s3_client = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY_ID, aws_secret_access_key=AWS_SECRET_ACCESS_KEY)
+            url = s3_client.generate_presigned_url('get_object', Params={'Bucket': AWS_STORAGE_BUCKET_NAME, 'Key': self.image.name}, ExpiresIn=1000)
+            return url
+        else:
+            return None
 
 class MenuItem(models.Model):
     """Model for menu item."""
