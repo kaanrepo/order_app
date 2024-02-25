@@ -43,10 +43,24 @@ class ProductForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['image2', 'handle']
 
+    def clean_image(self):
+        old_image = self.instance.image
+        new_image = self.cleaned_data.get('image')
+        if old_image and old_image != new_image:
+            old_image.delete(save=False)
+        return new_image
+
 class MenuCategoryForm(forms.ModelForm):
     class Meta:
         model = MenuCategory
         fields = '__all__'
+    
+    def clean_image(self):
+        old_image = self.instance.image
+        new_image = self.cleaned_data.get('image')
+        if old_image and old_image != new_image:
+            old_image.delete(save=False)
+        return new_image
 
 class MenuItemForm(forms.ModelForm):
     class Meta:

@@ -80,7 +80,7 @@ class Product(models.Model):
     
     def get_files_url(self):
         return reverse('product-files-view', kwargs={'id': self.id})
-
+    
 
 class MenuCategory(models.Model):
     """Model for menu category."""

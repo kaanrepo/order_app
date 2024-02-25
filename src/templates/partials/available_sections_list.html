@@ -1,0 +1,14 @@
+<div class="card shadow mb-3">
+    <div class="card-header py-3">
+        <h6 class="fw-bold text-primary m-0">Available Sections</h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for section in sections %}
+                <div class="col text-center">
+                    <button hx-target="#new-orders-container" hx-swap="innerHTML" hx-get={% url "available-tables-view" section.id %} class="btn btn-dark fs-3 fw-semibold border rounded" type="button">{{section.name|title}}</button>
+                </div>            
+            {% endfor %}
+        </div>
+    </div>
+</div>

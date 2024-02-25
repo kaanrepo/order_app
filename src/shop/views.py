@@ -23,7 +23,8 @@ class ActiveDashboardView(View):
 
     def get(self, request):
         today = timezone.now().date()
-        active_orders_today = Order.objects.filter(is_finished=True, created__date=today)
+        active_orders_today = Order.objects.filter(created__date=today)
+        active_orders_week = Order.objects.filter(created__week=today.isocalendar()[1])
         total_gain = sum([order.total_bill for order in active_orders_today])
         active_orders = Order.objects.filter(is_finished=False)
         undelivered_items = OrderItem.objects.filter(
@@ -35,6 +36,7 @@ class ActiveDashboardView(View):
             'active_orders': active_orders,
             'undelivered_items': undelivered_items,
             'active_orders_today': active_orders_today,
+            'active_orders_week': active_orders_week,
             'delivered_items_today': delivered_items_today,
             'total_gain': total_gain
         }
@@ -256,12 +258,24 @@ class OpenOrdersView(View):
             'active_orders': active_orders
         }
         return render(request, 'partials/open_orders_list.html', context=context)
+    
+class AvailableSectionsView(View):
+    """View for available sections."""
+
+    def get(self, request):
+        if not request.htmx:
+            return redirect('home-view')
+        sections = Section.objects.all()
+        context = {
+            'sections': sections
+        }
+        return render(request, 'partials/available_sections_list.html', context=context)
 
 class AvailableTablesView(View):
     """View for available tables."""
 
-    def get(self, request):
-        available_tables = Table.objects.filter(in_use=False)
+    def get(self, request, section_id:int):
+        available_tables = Table.objects.filter(section__id=section_id)
         context = {
             'available_tables': available_tables,
         }
@@ -587,6 +601,57 @@ class MenuItemListView2(View):
         }
         return render(request, 'partials/menu_items_list.html', context=context)
     
+
+class ProductProfileFilesView(View):
+    def get(self, request, handle:str):
+        if not request.htmx:
+            return redirect('home-view')
+        client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
+                            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                            default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
+        paginator = client.get_paginator('list_objects_v2')
+        obj_list = []
+        product = Product.objects.get(handle=handle)
+        pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'product/{product.id}/')
+        for page in pag_gen:
+            for c in page.get('Contents', []):
+                key = c.get('Key')
+                size = c.get('Size')
+                name = pathlib.Path(key).name
+                _type = None
+                try:
+                    _type = mimetypes.guess_type(name)[0]
+                except:
+                    pass
+                if size ==0:
+                    continue
+                url = client.generate_presigned_url(
+                    'get_object',
+                    Params={
+                        'Bucket': AWS_STORAGE_BUCKET_NAME,
+                        'Key': key
+                    },
+                    ExpiresIn=1000
+                )
+                is_image = 'image' in _type
+                data = {
+                    'product': product,
+                    'key': key,
+                    'size': size,
+                    'type': _type,
+                    'name': name,
+                    'is_image': is_image,
+                    'url': url
+
+                }
+                obj_list.append(data)
+        context = {
+            'obj_list': obj_list
+        }
+        return render(request, 'partials/product_profile_files.html', context=context)
+
+
+
 
 class ProductProfileView(View):
     """View for Product and MenuItem in a single view"""

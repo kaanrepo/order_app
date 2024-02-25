@@ -1,44 +1,59 @@
-<div class="col">
-    <div class="card shadow mb-3">
-        <div class="card-header py-3">
-            <h6 class="text-primary fw-bold m-0">{{product.name|title}}</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    <h4>Description</h4>
-                    <p>Paragraph</p>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-xxl-5">
+            <div class="card mb-3" hx-get={% url "product-profile-files-view" product.handle %} hx-trigger="load" hx-swap="innerHTML">
+                <div class="card-body text-center shadow" style="min-height:10vh">
+    
                 </div>
             </div>
-            <div class="row">
-                <div class="col">
-                    <h4 class="fw-bold">{{product.unit|title}}</h4>
-                    <p class="fw-semibold">Unit</p>
+        </div>
+        <div class="col-md-6 col-xxl-7">
+            <div class="card shadow mb-3">
+                <div class="card-header py-3">
+                    <h6 class="fw-bold text-primary m-0">{{product.name|title}}</h6>
                 </div>
-                <div class="col">
-                    <h4 class="fw-bold">{{product.size}}</h4>
-                    <p class="fw-semibold">Size</p>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h4>Description</h4>
+                            <p>Paragraph</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="fw-bold">{{product.unit|title}}</h4>
+                            <p class="fw-semibold">Unit</p>
+                        </div>
+                        <div class="col">
+                            <h4 class="fw-bold">{{product.size}}</h4>
+                            <p class="fw-semibold">Size</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="card shadow mb-3">
-        <div class="card-header py-3">
-            <h6 class="text-primary fw-bold m-0">Menu Item Details</h6>
-        </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col">
-                    <h4 class="fw-bold">{{menu_item.category}}</h4>
-                    <p class="fw-semibold">Category</p>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow mb-3">
+                <div class="card-header py-3">
+                    <h6 class="fw-bold text-primary m-0">Menu Item Details</h6>
                 </div>
-                <div class="col">
-                    <h4 class="fw-bold">{{menu_item.price}}</h4>
-                    <p class="fw-semibold">Price</p>
-                </div>
-                <div class="col">
-                    <h4 class="fw-bold">{{menu_item.is_active|yesno|title}}</h4>
-                    <p class="fw-semibold">Active</p>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h4 class="fw-bold">{{menu_item.category}}</h4>
+                            <p class="fw-semibold">Category</p>
+                        </div>
+                        <div class="col">
+                            <h4 class="fw-bold">{{menu_item.price}} TL</h4>
+                            <p class="fw-semibold">Price</p>
+                        </div>
+                        <div class="col">
+                            <h4 class="fw-bold">{{menu_item.is_active|yesno|title}}</h4>
+                            <p class="fw-semibold">Active</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

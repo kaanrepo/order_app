@@ -8,14 +8,38 @@
           <div class="row align-items-center no-gutters">
             <div class="col me-2">
               <div class="text-uppercase text-primary fw-bold text-xs mb-1">
-                <span>Earnings (monthly)</span>
+                <span>Orders</span>
               </div>
               <div class="text-dark fw-bold h5 mb-0">
-                <span>Orders Today: {{active_orders_today.count}}</span>
+                <span>Orders This week: {{active_orders_week.count}}</span>
               </div>
             </div>
             <div class="col-auto">
               <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3 mb-4">
+      <div class="card shadow border-start-info py-2">
+        <div class="card-body">
+          <div class="row align-items-center no-gutters">
+            <div class="col me-2">
+              <div class="text-uppercase text-info fw-bold text-xs mb-1">
+                <span>Orders</span>
+              </div>
+              <div class="row g-0 align-items-center">
+                <div class="col-auto">
+                  <div class="text-dark fw-bold h5 mb-0 me-3">
+                    <span>Orders Today: {{active_orders_today.count}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -27,37 +51,14 @@
           <div class="row align-items-center no-gutters">
             <div class="col me-2">
               <div class="text-uppercase text-success fw-bold text-xs mb-1">
-                <span>Earnings (annual)</span>
+                <span>Revenue Today:</span>
               </div>
               <div class="text-dark fw-bold h5 mb-0">
-                <span>Revenue Today: {{total_gain}} TL</span>
+                <span> {{total_gain}} TL</span>
               </div>
             </div>
             <div class="col-auto">
               <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6 col-xl-3 mb-4">
-      <div class="card shadow border-start-info py-2">
-        <div class="card-body">
-          <div class="row align-items-center no-gutters">
-            <div class="col me-2">
-              <div class="text-uppercase text-info fw-bold text-xs mb-1">
-                <span>Tasks</span>
-              </div>
-              <div class="row g-0 align-items-center">
-                <div class="col-auto">
-                  <div class="text-dark fw-bold h5 mb-0 me-3">
-                    <span>open tables</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-auto">
-              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
             </div>
           </div>
         </div>
@@ -82,8 +83,11 @@
     </div>
   </div>
 </div>
-<div id="open-orders-container" style="padding:20px">
+<div id="open-orders-container" style="padding:20px; margin-bot:10px">
   {% include "partials/open_orders_list.html" %}
+</div>
+<div id="new-orders-container" style="padding:20px; margin:10px">
+
 </div>
 <div id="undelivered-items-container" style="padding:20px">
   {% include "partials/undelivered_items_list.html" %}
