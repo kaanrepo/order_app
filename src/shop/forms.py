@@ -1,7 +1,9 @@
 from django import forms
 from .models import Table, Order, OrderItem, Product, MenuItem, MenuCategory, Section
 from django.urls import reverse
-
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Submit, HTML, Field
+from crispy_forms.bootstrap import InlineField
 class InactiveTableForm(forms.Form):
     table = forms.ChoiceField()
 
@@ -43,12 +45,22 @@ class ProductForm(forms.ModelForm):
         fields = '__all__'
         exclude = ['image2', 'handle']
 
+
+
     def clean_image(self):
         old_image = self.instance.image
         new_image = self.cleaned_data.get('image')
         if old_image and old_image != new_image:
             old_image.delete(save=False)
         return new_image
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            HTML('<h1 class="text-center">Product Form</h1>'),
+            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+        )
 
 class MenuCategoryForm(forms.ModelForm):
     class Meta:
@@ -61,6 +73,14 @@ class MenuCategoryForm(forms.ModelForm):
         if old_image and old_image != new_image:
             old_image.delete(save=False)
         return new_image
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            HTML('<h1 class="text-center">Category Form</h1>'),
+            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+        )
 
 class MenuItemForm(forms.ModelForm):
     class Meta:
@@ -68,13 +88,40 @@ class MenuItemForm(forms.ModelForm):
         fields = '__all__'
         exclude= ['handle', 'product']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.fields['category'].empty_label = "Select a category"
+        self.helper.layout = Layout(
+            HTML('<h1 class="text-center">Menu Item Form</h1>'),
+            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+        )
+
 class TableForm(forms.ModelForm):
     class Meta:
         model = Table
         fields = '__all__'
         exclude = ['in_use']
 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            HTML('<h1 class="text-center">Table Form</h1>'),
+            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+        )
+
 class SectionForm(forms.ModelForm):
     class Meta:
         model = Section
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            HTML('<h1 class="text-center">Section Form</h1>'),
+            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+            Submit('submit', 'Save', css_class='btn btn-dark mt-3 mb-3 col-md-6 offset-md-3')
+        )

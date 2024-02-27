@@ -7,3 +7,5 @@ django-htmx
 boto3
 natsort
 django-storages[s3]
+django-crispy-forms
+crispy-bootstrap4

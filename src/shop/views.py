@@ -5,6 +5,7 @@ from shop.forms import OrderItemForm, ProductForm, MenuCategoryForm, MenuItemFor
 from django.contrib import messages
 from django.utils import timezone
 from django.http import HttpResponse
+from django_htmx.http import HttpResponseClientRedirect
 import pathlib
 import mimetypes
 # Your code here
@@ -46,6 +47,19 @@ class ActiveDashboardView(View):
             pass
         return render(request, 'pages/new_home.html', context=context)
 
+
+class UndeliveredItemsView(View):
+    """View for undelivered items."""
+
+    def get(self, request):
+        if not request.htmx:
+            return redirect('home-view')
+        undelivered_items = OrderItem.objects.filter(
+            order__is_finished=False, is_delivered=False)
+        context = {
+            'undelivered_items': undelivered_items
+        }
+        return render(request, 'partials/undelivered_items_list.html', context=context)
 
 class PartialOrderItemsListDeleteView(View):
     def get(self, request):
@@ -750,8 +764,10 @@ class SectionListView(View):
 class SectionDetailView(View):
     def get(self, request, section_id:int):
         section = get_object_or_404(Section, id=section_id)
+        tables = section.table_set.all()
         context = {
-            'section': section
+            'section': section,
+            'tables': tables
         }
         return render(request, 'pages/section_detail_page.html', context)
 
@@ -764,6 +780,32 @@ class SectionCreateView(View):
     
     def post(self, request):
         form = SectionForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tables-by-section-view')
+        context = {
+            'form': form
+        }
+        return render(request, 'forms/object_form.html', context=context)
+    
+class SectionDeleteView(View):
+    def post(self, request, section_id:int):
+        section = get_object_or_404(Section, id=section_id)
+        section.delete()
+        return redirect('section-list-view')
+    
+class SectionUpdateView(View):
+    def get(self, request, section_id:int):
+        section = get_object_or_404(Section, id=section_id)
+        form = SectionForm(instance=section)
+        context = {
+            'form': form
+        }
+        return render(request, 'forms/object_form.html', context=context)
+    
+    def post(self, request, section_id:int):
+        section = get_object_or_404(Section, id=section_id)
+        form = SectionForm(request.POST, instance=section)
         if form.is_valid():
             form.save()
             return redirect('tables-by-section-view')

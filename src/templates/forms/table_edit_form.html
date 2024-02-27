@@ -1,9 +1,11 @@
+{% load crispy_forms_tags %}
 <form method="POST" action={% url "table-edit-view" table.id %}>
     {% csrf_token %}
 
 <h1>Table Form</h1>
 
-{{form.as_p}}
+
+{% crispy form %}
 
 <button type="submit">Submit</button>
 </form>

@@ -1,4 +1,4 @@
-<div class="card shadow">
+<div class="card shadow" hx-get={% url "undelivered-items-view" %} hx-trigger='every 5s' hx-swap="outerHTML">
     <div class="card-header py-3">
         <div class="row">
             <div class="col">
@@ -24,11 +24,12 @@
                 <tbody>
                     {% for item in undelivered_items %}
                         <tr>
-                            <td>{{item.menu_item.product.name}}</td>
-                            <td>{{item.menu_item.product.unit}}</td>
+                            <td>{{item.menu_item.product.name|title}}</td>
+                            <td>{{item.menu_item.product.unit|title}}</td>
                             <td>{{item.menu_item.product.size}}</td>
                             <td>{{item.created|date:"P"}}<br /></td>
                             <td>{{item.order.table.name}}</td>
+                            <td><a href={% url "order-detail-view" item.order.id %}> <button class="btn btn-dark">  go to order</button></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

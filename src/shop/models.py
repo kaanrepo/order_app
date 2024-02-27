@@ -210,7 +210,7 @@ class Order(models.Model):
     @property
     def total_bill(self):
         """ Calculate total bill for the order."""
-        return sum([item.menu_item.price * item.quantity for item in self.orderitem_set.all() if item.is_delivered])
+        return sum([item.menu_item.price * item.quantity for item in self.orderitem_set.all()])
 
     def __str__(self):
         return self.table.name + '- order:' + str(self.id)

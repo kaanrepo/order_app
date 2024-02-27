@@ -24,7 +24,7 @@
                 <tbody>
                     {% for order in active_orders %}
                         <tr>
-                            <td><a href={% url "order-detail-view" order.id %}>{{order.table.name}}<a/></td>
+                            <td><a href={% url "order-detail-view" order.id %}>{{order.table.name|title}}<a/></td>
                             <td>{{order.created|date:"P"}}</td>
                             <td>{{order.is_paid|yesno|title}}</td>
                             <td>{{order.total_bill}} TL</td>

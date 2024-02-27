@@ -30,6 +30,8 @@ from .views import (ActivateTableOrderView,
                     ProductUpdateView,
                     SectionCreateView,
                     SectionDetailView,
+                    SectionUpdateView,
+                    SectionDeleteView,
                     SectionListView,
                     SwitchOrderTableView,
                     TableDeleteView,
@@ -37,7 +39,8 @@ from .views import (ActivateTableOrderView,
                     TableEditView,
                     TablesbySectionView,
                     MenuCategoryFilesView,
-                    MenuItemFilesView,)
+                    MenuItemFilesView,
+                    UndeliveredItemsView,)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -53,6 +56,7 @@ urlpatterns = [
     path('order_item/create/<int:item_id>/', OrderItemCreateView.as_view(), name='order-item-create-view'),
     path('order_item/deliver/<int:item_id>/', DeliverOrderItemView.as_view(), name='deliver-order-item-view'),
     path('order_item/delete/<int:item_id>/', DeleteOrderItemView.as_view(), name='delete-order-item-view'),
+    path('order_item/undelivered/', UndeliveredItemsView.as_view(), name='undelivered-items-view'),
     ### Table URLs
     path('tables/', TablesbySectionView.as_view(), name='tables-by-section-view'),
     path('tables/<int:table_id>/', TableDetailView.as_view(), name='table-detail-view'),
@@ -68,6 +72,8 @@ urlpatterns = [
     path('section/available/', AvailableSectionsView.as_view(), name='available-sections-view'),
     path('section/<int:section_id>/', SectionDetailView.as_view(), name='section-detail-view'),
     path('section/create/', SectionCreateView.as_view(), name='section-create-view'),
+    path('section/<int:section_id>/update/', SectionUpdateView.as_view(), name='section-update-view'),
+    path('section/<int:section_id>/delete/', SectionDeleteView.as_view(), name='section-delete-view'),
 
     ### Product URLs
     path('products/', ProductListView.as_view(), name='product-list-view'),

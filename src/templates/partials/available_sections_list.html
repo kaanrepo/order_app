@@ -7,8 +7,9 @@
             {% for section in sections %}
                 <div class="col text-center">
                     <button hx-target="#new-orders-container" hx-swap="innerHTML" hx-get={% url "available-tables-view" section.id %} class="btn btn-dark fs-3 fw-semibold border rounded" type="button">{{section.name|title}}</button>
-                </div>            
+                </div>     
             {% endfor %}
         </div>
+        <button style="display:none" hx-target="#new-orders-container" hx-swap="innerHTML" hx-get={% url "home-view" %} hx-trigger="load delay:4s" class="btn btn-dark fs-3 fw-semibold border rounded" type="button">GO BACK HX</button>
     </div>
 </div>
