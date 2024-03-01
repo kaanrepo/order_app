@@ -9,3 +9,4 @@ natsort
 django-storages[s3]
 django-crispy-forms
 crispy-bootstrap4
+psycopg2-binary
