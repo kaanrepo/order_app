@@ -13,7 +13,7 @@
                         <h6 class="mb-0"><strong>Order Id</strong></h6><span class="text-m">{{order.id}}</span>
                     </div>
                     <div class="col me-2">
-                        <h6 class="mb-0"><strong>Time</strong></h6><span class="text-m">{{ order.created|date:"P" }}</span>
+                        <h6 class="mb-0"><strong>Time</strong></h6><span class="text-m">{{ order.created|date:"G:i / j M" }}</span>
                     </div>
                     <div class="col me-2">
                         {% if order.is_paid %}

@@ -687,23 +687,28 @@ class ProductProfileEditView(View):
         menu_item = MenuItem.objects.get(product=product)
         product_form = ProductForm(request.POST, request.FILES, instance=product)
         menu_item_form = MenuItemForm(request.POST, instance=menu_item)
+        context = {
+            'product_form': product_form,
+            'menu_item_form': menu_item_form,
+            'product': product
+        }
         if all([product_form.is_valid(), menu_item_form.is_valid()]):
             product_form.save()
             menu_item_form.save()
             return redirect('product-profile-view', product.handle)
+        return render(request, 'pages/product_create_page.html', context)
         
     def get(self, request, handle:str):
         product = Product.objects.get(handle=handle)
         menu_item = MenuItem.objects.get(product=product)
         product_form = ProductForm(instance=product)
         menu_item_form = MenuItemForm(instance=menu_item)
-
         context = {
             'product_form': product_form,
             'menu_item_form': menu_item_form,
             'product': product,
         }
-        return render(request, 'partials/product_create_edit_forms.html', context)
+        return render(request, 'pages/product_create_page.html', context)
     
 
 
@@ -730,7 +735,7 @@ class ProductProfileCreateView(View):
             'product_form': product_form,
             'menu_item_form': menu_item_form
         }
-        return render(request, 'partials/messages_template.html', context)
+        return render(request, 'pages/product_create_page.html', context)
     
 
 class ProductProfileDeleteView(View):
@@ -799,8 +804,11 @@ class SectionUpdateView(View):
         section = get_object_or_404(Section, id=section_id)
         form = SectionForm(instance=section)
         context = {
-            'form': form
+            'form': form,
+            'section': section
         }
+        if request.htmx:
+            return render(request, 'forms/partial_object_form.html', context)
         return render(request, 'forms/object_form.html', context=context)
     
     def post(self, request, section_id:int):
@@ -808,7 +816,7 @@ class SectionUpdateView(View):
         form = SectionForm(request.POST, instance=section)
         if form.is_valid():
             form.save()
-            return redirect('tables-by-section-view')
+            return redirect('section-detail-view', section.id)
         context = {
             'form': form
         }
@@ -861,7 +869,7 @@ class TableEditView(View):
         form = TableForm(request.POST, instance=table)
         if form.is_valid():
             form.save()
-            return redirect('tables-by-section-view')
+            return redirect('table-detail-view', table.id)
         context = {
             'table': table,
             'form': form

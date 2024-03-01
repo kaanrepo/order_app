@@ -63,7 +63,7 @@
 <div class="row d-flex d-sm-flex justify-content-end">
     <div class="col-md-6 col-xl-3 d-flex d-sm-flex justify-content-end align-items-sm-center justify-content-xl-end mb-4">
         <div class="card shadow border-start-primary py-2" style="background: #dddddd;width: 185px;height: 73px; margin-right:20px;">
-            <div class="card-body text-center d-flex justify-content-sm-end" style="margin-top: -7px;"><button class="btn btn-warning" hx-target="#product-profile-container" hx-swap="innerHTML" hx-get={% url "product-profile-edit-view" product.handle %} type="button" style="margin-right: 5px;margin-left: 5px;">Edit</button><form>{% csrf_token %}<button id="deleteProductButton" class="btn btn-dark" type="button" hx-post={% url "product-profile-delete-view" product.handle %} hx-boost="true" hx-confirm="Are you sure you want to delete {{product.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div>
+            <div class="card-body text-center d-flex justify-content-sm-end" style="margin-top: -7px;"><a href={% url "product-profile-edit-view" product.handle %}><button class="btn btn-warning" type="button" style="margin-right: 5px;margin-left: 5px;">Edit</button></a><form>{% csrf_token %}<button id="deleteProductButton" class="btn btn-dark" type="button" hx-post={% url "product-profile-delete-view" product.handle %} hx-boost="true" hx-confirm="Are you sure you want to delete {{product.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div>
         </div>
     </div>
 </div>

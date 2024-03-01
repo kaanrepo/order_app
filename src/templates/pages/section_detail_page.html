@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container" id="section-detail-container">
     <div class="row">
         <div class="col-md-6 col-xxl-7">
             <div class="card shadow mb-3">
@@ -12,44 +12,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h4>Description</h4>
-                            <p>Paragraph</p>
+                            <h4>Notes</h4>
+                            <p>{{section.notes}}</p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <h4 class="fw-bold"></h4>
-                            <p class="fw-semibold">Unit</p>
-                        </div>
-                        <div class="col">
-                            <h4 class="fw-bold"></h4>
-                            <p class="fw-semibold">Size</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow mb-3">
-                <div class="card-header py-3">
-                    <h6 class="fw-bold text-primary m-0">Menu Item Details</h6>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h4 class="fw-bold"></h4>
-                            <p class="fw-semibold">Category</p>
-                        </div>
-                        <div class="col">
-                            <h4 class="fw-bold"> TL</h4>
-                            <p class="fw-semibold">Price</p>
-                        </div>
-                        <div class="col">
-                            <h4 class="fw-bold"></h4>
-                            <p class="fw-semibold">Active</p>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +27,7 @@
 <div class="row d-flex d-sm-flex justify-content-end">
     <div class="col-md-6 col-xl-3 d-flex d-sm-flex justify-content-end align-items-sm-center justify-content-xl-end mb-4">
         <div class="card shadow border-start-primary py-2" style="background: #dddddd;width: 185px;height: 73px; margin-right:20px;">
-            <div class="card-body text-center d-flex justify-content-sm-end" style="margin-top: -7px;"><button class="btn btn-warning" hx-target="#product-profile-container" hx-swap="innerHTML" hx-get={% url "section-update-view" section.id %} type="button" style="margin-right: 5px;margin-left: 5px;">Edit</button><form>{% csrf_token %}<button id="deleteSectionButton" class="btn btn-dark" type="button" hx-post={% url "section-delete-view" section.id %} hx-boost="true" hx-confirm="Are you sure you want to delete {{section.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div>
+            <div class="card-body text-center d-flex justify-content-sm-end" style="margin-top: -7px;"><button class="btn btn-warning" hx-target="#section-detail-container" hx-swap="innerHTML" hx-get={% url "section-update-view" section.id %} type="button" style="margin-right: 5px;margin-left: 5px;">Edit</button><form>{% csrf_token %}<button id="deleteSectionButton" class="btn btn-dark" type="button" hx-post={% url "section-delete-view" section.id %} hx-boost="true" hx-confirm="Are you sure you want to delete {{section.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div>
         </div>
     </div>
 </div>

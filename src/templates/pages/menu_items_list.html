@@ -14,4 +14,23 @@
 </div>
 
 
+
+<div class="row d-flex d-sm-flex justify-content-end">
+    <div class="col-md-6 col-xl-3 d-flex d-sm-flex justify-content-end align-items-sm-center justify-content-xl-end mb-4">
+        <div class="card shadow border-start-primary py-2" style="background: #dddddd;width: 185px;height: 73px; margin-right:20px;">
+            <div class="card-body text-center d-flex justify-content-sm-end" style="margin-top: -7px;">
+                <a href={% url "menu-category-update-view" category.id %}> <button class="btn btn-warning" type="button" style="margin-right: 5px;margin-left: 5px;">Edit</button></a>
+                <form>{% csrf_token %}<button id="deleteCategoryeButton" class="btn btn-dark" type="button" hx-post={% url "menu-category-delete-view" category.id %} hx-boost="true" hx-confirm="Are you sure you want to delete {{category.name|title}}?" hx-swap="none" style="margin-right: 5px;margin-left: 5px;">Delete</button></form></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    document.getElementById('deleteCategoryeButton').addEventListener('htmx:afterOnLoad', function() {
+        window.location.href = "{% url "home-view" %}";  // replace '/home' with your actual home page URL
+    });
+</script>
+
 {% endblock content %}
+

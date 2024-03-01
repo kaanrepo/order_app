@@ -1,7 +1,18 @@
 {% extends "main/new_base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
-    {% include "partials/product_create_form.html" %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+{% include "forms/product_form.html" %}
+
+
+{% include "forms/menu_item_form.html" %}
+
+<button type="submit" class="btn btn-dark mt-3 mb-3 col-md-6 offset-md-3" >Submit biz</button>
+</form>
+
     
 {% endblock content %}

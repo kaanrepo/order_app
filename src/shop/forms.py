@@ -44,6 +44,9 @@ class ProductForm(forms.ModelForm):
         model = Product
         fields = '__all__'
         exclude = ['image2', 'handle']
+        help_texts = {
+            'image': 'Enter the price of the product',
+        }
 
 
 
@@ -57,15 +60,39 @@ class ProductForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_show_labels = False
+        self.helper.form_tag = False
+        self.helper.form
         self.helper.layout = Layout(
             HTML('<h1 class="text-center">Product Form</h1>'),
             *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+             HTML('<p class="text-center">Only images with size less than 2MB.</p>'),
+
         )
+
+class MenuItemForm(forms.ModelForm):
+    class Meta:
+        model = MenuItem
+        fields = '__all__'
+        exclude= ['handle', 'product']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.fields['category'].empty_label = "Select a category"
+        self.helper.form_show_labels = False
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            HTML('<h1 class="text-center">Menu Item Form</h1>'),
+            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+        )
+
 
 class MenuCategoryForm(forms.ModelForm):
     class Meta:
         model = MenuCategory
         fields = '__all__'
+        exclude = ['handle']
     
     def clean_image(self):
         old_image = self.instance.image
@@ -80,22 +107,10 @@ class MenuCategoryForm(forms.ModelForm):
         self.helper.layout = Layout(
             HTML('<h1 class="text-center">Category Form</h1>'),
             *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+            HTML('<p class="text-center">Only images with size less than 2MB.</p>'),
+            Submit('submit', 'Save', css_class='btn btn-dark mt-3 mb-3 col-md-6 offset-md-3')
         )
 
-class MenuItemForm(forms.ModelForm):
-    class Meta:
-        model = MenuItem
-        fields = '__all__'
-        exclude= ['handle', 'product']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.fields['category'].empty_label = "Select a category"
-        self.helper.layout = Layout(
-            HTML('<h1 class="text-center">Menu Item Form</h1>'),
-            *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
-        )
 
 class TableForm(forms.ModelForm):
     class Meta:
@@ -107,9 +122,11 @@ class TableForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.fields['section'].empty_label = "Select a section"
         self.helper.layout = Layout(
             HTML('<h1 class="text-center">Table Form</h1>'),
             *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
+            Submit('submit', 'Save', css_class='btn btn-dark mt-3 mb-3 col-md-6 offset-md-3')
         )
 
 class SectionForm(forms.ModelForm):

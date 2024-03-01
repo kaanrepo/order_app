@@ -4,7 +4,8 @@
 <div class="col" style="max-width: 200px;">
     <a href={% url "menu-item-list-view" obj_dict.category.handle %} style="text-decoration:none">
     <div class="card">
-        <img class="card-img-top w-100 d-block d-xxl-flex fit-cover" style="height: 200px;" src="{{obj_dict.url}}" alt={{category.name}} title={{category.name}} />        <div class="card-body p-4">
+        <img class="card-img-top w-100 d-block d-xxl-flex fit-cover" style="height: 200px;" src="{{obj_dict.url}}" alt={{obj_dict.category.name}} title={{obj_dict.category.name}} />
+        <div class="card-body p-4">
             <h4 class="card-title">{{obj_dict.category.name}}</h4>
         </div>
     </div>

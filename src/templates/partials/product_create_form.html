@@ -1,14 +1,10 @@
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
 
-
-
 {% include "forms/product_form.html" %}
 
 
-<hr>
-
 {% include "forms/menu_item_form.html" %}
 
-<button class="btn btn-dark mt-3 mb-3 col-md-6 offset-md-3" type="submit">Submit</button>
+<button type="submit" class="btn btn-dark mt-3 mb-3 col-md-6 offset-md-3" >Submit biz</button>
 </form>

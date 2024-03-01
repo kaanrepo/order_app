@@ -1,0 +1,7 @@
+{% load crispy_forms_tags %}
+
+<form method="post" action={% url "section-update-view" section.id %} class="form-group" enctype="multipart/form-data" >
+{% csrf_token %}
+{% crispy form %}
+</form>
+

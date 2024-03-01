@@ -10,7 +10,9 @@
         {% for section, tables in tables_by_section.items %}
         <div class="card shadow mb-4" style="margin-right: 5px;margin-left: 5px;">
             <div class="card-header py-3">
-                <h6 class="text-primary fw-bold m-0">{{section}}</h6>
+                <a href={% url "section-detail-view" section.id %}>
+                <h6 class="text-primary fw-bold m-0">{{section.name|title}}</h6>
+                </a>
             </div>
             <div class="card-body">
                 <ul>

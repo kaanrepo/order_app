@@ -17,6 +17,7 @@
                         <th>Item Name</th>
                         <th>Unit</th>
                         <th>Size</th>
+                        <th>Quantity</th>
                         <th>Order Time</th>
                         <th>Table</th>
                     </tr>
@@ -27,9 +28,10 @@
                             <td>{{item.menu_item.product.name|title}}</td>
                             <td>{{item.menu_item.product.unit|title}}</td>
                             <td>{{item.menu_item.product.size}}</td>
+                            <td>{{item.quantity}}</td>
                             <td>{{item.created|date:"P"}}<br /></td>
                             <td>{{item.order.table.name}}</td>
-                            <td><a href={% url "order-detail-view" item.order.id %}> <button class="btn btn-dark">  go to order</button></a></td>
+                            <td><a href={% url "order-detail-view" item.order.id %}> <button class="btn btn-dark">Order</button></a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

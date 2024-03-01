@@ -3,9 +3,19 @@
 {% block content %}
 
     <div class="col flex flex-row">
-        <input hx-get={% url "historical-orders-view" %} name="q" hx-target="#historical-orders-container" hx-swap="innerHTML" class="form-control" type='search' placeholder="Search Orders..." hx-trigger="keyup changed delay:0.5s" />
+        {% comment %} <input hx-get={% url "historical-orders-view" %} name="q" hx-target="#historical-orders-container" hx-swap="innerHTML" class="form-control" type='search' placeholder="Search Orders..." hx-trigger="keyup changed delay:0.5s" /> {% endcomment %}
     </div>
-
+    <div class="row">
+      <div class="col" style="margin-left:15px">
+        <input hx-get={% url "historical-orders-view" %} name="q" hx-target="#historical-orders-container" hx-swap="innerHTML" class="form-control" type='search' placeholder="Search Orders..." hx-trigger="keyup changed delay:1ss" />
+      </div>
+      <div class="col">
+                  {% comment %} <h3 class="text-primary fw-bold m-0">Orders</h3> {% endcomment %}
+      </div>
+      <div class="col">
+          {% comment %} <p class="text-center text-primary m-0 fw-bold">Order count: {{orders|length}}</p> {% endcomment %}
+      </div>
+  </div>
 
 <div id="historical-orders-container" style="padding:20px">
   {% include "partials/historical_orders_list.html" %}

@@ -15,7 +15,7 @@
             <table id="dataTable" class="table my-0">
                 <thead>
                     <tr>
-                        <th>Table Name</th>
+                        <th>Table / Section</th>
                         <th>Open Time</th>
                         <th>Paid</th>
                         <th>Total Bill</th>
@@ -24,10 +24,11 @@
                 <tbody>
                     {% for order in active_orders %}
                         <tr>
-                            <td><a href={% url "order-detail-view" order.id %}>{{order.table.name|title}}<a/></td>
+                            <td><a href={% url "order-detail-view" order.id %}>{{order.table.name|title}} / {{order.table.section.name|title}}<a/></td>
                             <td>{{order.created|date:"P"}}</td>
                             <td>{{order.is_paid|yesno|title}}</td>
                             <td>{{order.total_bill}} TL</td>
+                            <td><a href={% url "order-detail-view" order.id %}><button class="btn btn-dark">Order</button><a/></td>
                         </tr>
                     {% endfor %}
                 </tbody>
