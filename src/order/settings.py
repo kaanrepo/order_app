@@ -92,16 +92,16 @@ DATABASES = {
     }
 }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("POSTGRES_DB", default=None, cast=str),
-        'USER': config("POSTGRES_USER", default=None, cast=str),
-        'PASSWORD': config("POSTGRES_PASSWORD", default=None, cast=str),
-        'HOST': config("POSTGRES_HOST", default=None, cast=str),
-        'PORT': config("POSTGRES_PORT", default=None, cast=int),
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config("POSTGRES_DB", default=None, cast=str),
+#         'USER': config("POSTGRES_USER", default=None, cast=str),
+#         'PASSWORD': config("POSTGRES_PASSWORD", default=None, cast=str),
+#         'HOST': config("POSTGRES_HOST", default=None, cast=str),
+#         'PORT': config("POSTGRES_PORT", default=None, cast=int),
+#     }
+# }
 
 
 # Password validation

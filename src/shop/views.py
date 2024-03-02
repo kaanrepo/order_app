@@ -149,8 +149,10 @@ class MenuCategoryListView(View):
 
     def get(self, request):
         qs = MenuCategory.objects.all()
+        order = request.order
         context = {
-            'categories': qs
+            'categories': qs,
+            'order': order
         }
         if request.htmx:
             return render(request, 'partials/menu_categories_list.html', context=context)
