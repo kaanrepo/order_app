@@ -210,6 +210,9 @@ class Order(models.Model):
 
     objects = OrderManager()
 
+    class Meta:
+        ordering = ('-created',)
+
     @property
     def total_bill(self):
         """ Calculate total bill for the order."""

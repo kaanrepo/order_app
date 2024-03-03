@@ -40,7 +40,8 @@ from .views import (ActivateTableOrderView,
                     TablesbySectionView,
                     MenuCategoryFilesView,
                     MenuItemFilesView,
-                    UndeliveredItemsView,)
+                    UndeliveredItemsView,
+                    ChartsView,)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -93,5 +94,7 @@ urlpatterns = [
     path('menu-category/create/', MenuCategoryCreateView.as_view(), name='menu-category-create-view'),
     path('menu-category/update/<int:category_id>/', MenuCategoryUpdateView.as_view(), name='menu-category-update-view'),
     path('menu-category/delete/<int:category_id>/', MenuCategoryDeleteView.as_view(), name='menu-category-delete-view'),
-    ### MenuItem URLs
+    
+    ### Charts
+    path('charts/', ChartsView.as_view(), name='charts-view'),
 ]

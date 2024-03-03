@@ -8,7 +8,9 @@ from django.http import HttpResponse
 from django_htmx.http import HttpResponseClientRedirect
 import pathlib
 import mimetypes
-# Your code here
+from django.db.models import Sum, F, Count
+from django.db.models.functions import TruncDate, ExtractHour, TruncMonth
+import plotly.express as px
 
 ### s3
 import s3
@@ -648,7 +650,10 @@ class ProductProfileFilesView(View):
                     },
                     ExpiresIn=1000
                 )
-                is_image = 'image' in _type
+                try:
+                    is_image = 'image' in _type
+                except:
+                    is_image = False
                 data = {
                     'product': product,
                     'key': key,
@@ -906,3 +911,93 @@ class FinishOpenOrdersView(View):
             table.in_use = False
             table.save()
         return render(request, 'partials/open_orders_list.html', {})
+    
+
+class ChartsView(View):
+    def get(self, request):
+        if request.htmx:
+            revenue_by_date = OrderItem.objects.annotate(
+                date_only=TruncDate('created')
+            ).values('date_only').annotate(revenue=Sum(F('menu_item__price') * F('quantity')))
+
+            x = revenue_by_date.values_list('date_only', flat=True)
+            y = revenue_by_date.values_list('revenue', flat=True)
+
+            fig = px.line(
+                x=x,
+                y=y,
+                labels={'x': 'Date', 'y': 'Revenue'},
+            )
+            fig.update_layout(
+                xaxis_title="Date",
+                yaxis_title="Revenue",
+                dragmode=False,
+            )
+            fig.update_traces(mode="markers+lines", textposition='top center')
+            chart = fig.to_html()
+
+            quantity_by_product = OrderItem.objects.values('menu_item__product__name', 'menu_item__product__unit' , 'menu_item__product__size').annotate(quantity=Sum('quantity'))
+            x1 = [f"{item['menu_item__product__name']} {item['menu_item__product__size']} {item['menu_item__product__unit']}" for item in quantity_by_product]
+            y1 = quantity_by_product.values_list('quantity', flat=True)
+            fig1 = px.bar(
+                x=x1,
+                y=y1,
+                labels={'x': 'Product', 'y': 'Quantity'},
+                text_auto=True,
+            )
+            fig1.update_traces(textposition='outside')
+            fig1.update_layout(
+                dragmode=False,
+            )
+            chart2 = fig1.to_html()
+
+            orders_by_time = Order.objects.annotate(hour=ExtractHour('created')).values('hour').annotate(count=Count('id'))
+            x2 = orders_by_time.values_list('hour', flat=True)
+            y2 = orders_by_time.values_list('count', flat=True)
+            fig2 = px.bar(
+                x=x2,
+                y=y2,
+                labels={'x': 'Hour', 'y': 'Orders'},
+                text_auto=True,
+            )
+            fig2.update_layout(
+                dragmode=False,
+            )
+            fig2.update_xaxes(
+                range=[0, 24],
+            )
+            fig2.update_traces(textposition='outside')
+            chart3 = fig2.to_html()
+
+            revenue_by_category = OrderItem.objects.values('menu_item__category__name').annotate(revenue=Sum(F('menu_item__price') * F('quantity')))
+            x3 = revenue_by_category.values_list('menu_item__category__name', flat=True)
+            y3 = revenue_by_category.values_list('revenue', flat=True)
+            fig3 = px.bar(
+                x=x3,
+                y=y3,
+                labels={'x': 'Category', 'y': 'Revenue'},
+                text_auto=True,
+            )
+            fig3.update_layout(
+                dragmode=False,
+            )
+
+            fig3.update_traces(textposition='outside')
+
+            chart4 = fig3.to_html()
+            context = {
+                'chart': chart,
+                'chart2': chart2,
+                'chart3': chart3,
+                'chart4': chart4
+            }
+            return render(request, 'partials/charts_partial.html', context)
+
+
+        return render(request, 'pages/charts_page.html', {})
+    
+
+
+
+
+

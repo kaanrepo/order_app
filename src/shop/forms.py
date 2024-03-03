@@ -4,6 +4,10 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Field
 from crispy_forms.bootstrap import InlineField
+from PIL import Image
+from io import BytesIO
+from django.core.files import File
+
 class InactiveTableForm(forms.Form):
     table = forms.ChoiceField()
 
@@ -53,8 +57,20 @@ class ProductForm(forms.ModelForm):
     def clean_image(self):
         old_image = self.instance.image
         new_image = self.cleaned_data.get('image')
+
         if old_image and old_image != new_image:
             old_image.delete(save=False)
+
+        if new_image:
+            img = Image.open(new_image)
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                output = BytesIO()
+                img.save(output, format='JPEG', quality=75)
+                output.seek(0)
+                new_image = File(output, name=new_image.name)
+
         return new_image
     
     def __init__(self, *args, **kwargs):

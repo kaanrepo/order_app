@@ -1,0 +1,22 @@
+{% extends "main/new_base.html" %}
+
+{% block content %}
+
+
+
+<div hx-get={% url "charts-view" %} hx-trigger="load" hx-swap="outerHTML" >
+
+</div>
+
+
+<style>
+    .chart-area {
+        width: 100%;  /* Adjust as needed */
+        height: 100%; /* Adjust as needed */
+        overflow: auto; /* Adds scrollbars if content is too big */
+    }
+    </style>
+
+{% endblock content %}
+
+

@@ -85,23 +85,23 @@ WSGI_APPLICATION = 'order.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("POSTGRES_DB", default=None, cast=str),
-        'USER': config("POSTGRES_USER", default=None, cast=str),
-        'PASSWORD': config("POSTGRES_PASSWORD", default=None, cast=str),
-        'HOST': config("POSTGRES_HOST", default=None, cast=str),
-        'PORT': config("POSTGRES_PORT", default=None, cast=int),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config("POSTGRES_DB", default=None, cast=str),
+#         'USER': config("POSTGRES_USER", default=None, cast=str),
+#         'PASSWORD': config("POSTGRES_PASSWORD", default=None, cast=str),
+#         'HOST': config("POSTGRES_HOST", default=None, cast=str),
+#         'PORT': config("POSTGRES_PORT", default=None, cast=int),
+#     }
+# }
 
 
 # Password validation
