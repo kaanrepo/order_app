@@ -98,51 +98,48 @@ class OrderDetailView(View):
 
 
 class MenuCategoryFilesView(View):
-    def get(self, request):
+    def get(self, request, category_id:int):
         if not request.htmx:
             return redirect('menu-category-list-view')
         client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
                             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                             default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
         paginator = client.get_paginator('list_objects_v2')
-        obj_list = []
-        categories = MenuCategory.objects.all()
-        for category in categories:
-            pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'category/{category.id}/')
-            for page in pag_gen:
-                for c in page.get('Contents', []):
-                    key = c.get('Key')
-                    size = c.get('Size')
-                    name = pathlib.Path(key).name
-                    _type = None
-                    try:
-                        _type = mimetypes.guess_type(name)[0]
-                    except:
-                        pass
-                    if size ==0:
-                        continue
-                    url = client.generate_presigned_url(
-                        'get_object',
-                        Params={
-                            'Bucket': AWS_STORAGE_BUCKET_NAME,
-                            'Key': key
-                        },
-                        ExpiresIn=1000
-                    )
-                    is_image = 'image' in _type
-                    data = {
-                        'category': category,
-                        'key': key,
-                        'size': size,
-                        'type': _type,
-                        'name': name,
-                        'is_image': is_image,
-                        'url': url
+        category = get_object_or_404(MenuCategory, id=category_id)
+        pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'category/{category.id}/')
+        for page in pag_gen:
+            for c in page.get('Contents', []):
+                key = c.get('Key')
+                size = c.get('Size')
+                name = pathlib.Path(key).name
+                _type = None
+                try:
+                    _type = mimetypes.guess_type(name)[0]
+                except:
+                    pass
+                if size ==0:
+                    continue
+                url = client.generate_presigned_url(
+                    'get_object',
+                    Params={
+                        'Bucket': AWS_STORAGE_BUCKET_NAME,
+                        'Key': key
+                    },
+                    ExpiresIn=1000
+                )
+                is_image = 'image' in _type
+                data = {
+                    'category': category,
+                    'key': key,
+                    'size': size,
+                    'type': _type,
+                    'name': name,
+                    'is_image': is_image,
+                    'url': url
 
-                    }
-                    obj_list.append(data)
+                }
         context = {
-            'obj_list': obj_list
+            'data': data
         }
         return render(request, 'partials/menu_category_files.html', context=context)
 
@@ -160,51 +157,48 @@ class MenuCategoryListView(View):
         return render(request, 'pages/menu_categories_list.html', context=context)
     
 class MenuItemFilesView(View):
-    def get(self, request, category_handle:str):
+    def get(self, request, menu_item_id:int):
         if not request.htmx:
             return redirect('menu-category-list-view')
         client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
                             aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                             default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
         paginator = client.get_paginator('list_objects_v2')
-        obj_list = []
-        category = MenuCategory.objects.get(handle=category_handle)
-        for menu_item in category.menuitem_set.all():
-            pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'product/{menu_item.product.id}/')
-            for page in pag_gen:
-                for c in page.get('Contents', []):
-                    key = c.get('Key')
-                    size = c.get('Size')
-                    name = pathlib.Path(key).name
-                    _type = None
-                    try:
-                        _type = mimetypes.guess_type(name)[0]
-                    except:
-                        pass
-                    if size ==0:
-                        continue
-                    url = client.generate_presigned_url(
-                        'get_object',
-                        Params={
-                            'Bucket': AWS_STORAGE_BUCKET_NAME,
-                            'Key': key
-                        },
-                        ExpiresIn=1000
-                    )
-                    is_image = 'image' in _type
-                    data = {
-                        'menu_item': menu_item,
-                        'key': key,
-                        'size': size,
-                        'type': _type,
-                        'name': name,
-                        'is_image': is_image,
-                        'url': url
+        menu_item = get_object_or_404(MenuItem, id=menu_item_id)
+        pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'product/{menu_item.product.id}/')
+        for page in pag_gen:
+            for c in page.get('Contents', []):
+                key = c.get('Key')
+                size = c.get('Size')
+                name = pathlib.Path(key).name
+                _type = None
+                try:
+                    _type = mimetypes.guess_type(name)[0]
+                except:
+                    pass
+                if size ==0:
+                    continue
+                url = client.generate_presigned_url(
+                    'get_object',
+                    Params={
+                        'Bucket': AWS_STORAGE_BUCKET_NAME,
+                        'Key': key
+                    },
+                    ExpiresIn=1000
+                )
+                is_image = 'image' in _type
+                data = {
+                    'menu_item': menu_item,
+                    'key': key,
+                    'size': size,
+                    'type': _type,
+                    'name': name,
+                    'is_image': is_image,
+                    'url': url
 
-                    }
-                    obj_list.append(data)
+                }
         context = {
-            'obj_list': obj_list
+            'data': data
         }
         return render(request, 'partials/menu_items_files.html', context=context)
 

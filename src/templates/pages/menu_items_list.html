@@ -1,4 +1,5 @@
 {% extends "main/new_base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -9,9 +10,30 @@
             <h2>{{category.name|title}}</h2>
         </div>
     </div>
-    <div hx-get={% url "menu-item-files-view" category.handle %} hx-trigger="load"  class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
-    </div>
+
+    <div class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3" >
+    {% for menu_item in items %}
+    <div class="col" style="max-width: 200px;">
+        <a href={% url "product-profile-view" menu_item.product.handle %} style="text-decoration:none">
+        <div class="card">
+            {% if menu_item.product.image %}
+            <div hx-get={% url "menu-item-files-view" menu_item.id %} hx-trigger="load"  class="row gy-4 row-cols-1 row-cols-md-2 row-cols-xl-3">
+            </div>
+            {% else %}
+            <img class="card-img-top w-100 d-block d-xxl-flex fit-cover" style="height: 200px;" src={% static "assets/default/default.jpg" %} alt="default" title="default" />
+            {% endif %}       
+            <div class="card-body p-4">
+                <h4 class="card-title">{{menu_item.product.name|title}}</h4>
+                <p class="card-text">{{menu_item.product.size}} {{menu_item.product.unit}} {{menu_item.price}} TL</p>
+            </div>
+        </div>
+        </a>
+    </div>    
+    
+    {% endfor %}
 </div>
+</div>
+
 
 
 
