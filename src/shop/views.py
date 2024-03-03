@@ -957,7 +957,7 @@ class ChartsView(View):
             fig2 = px.bar(
                 x=x2,
                 y=y2,
-                labels={'x': 'Hour', 'y': 'Orders'},
+                labels={'x': 'Hour of the day', 'y': 'Orders'},
                 text_auto=True,
             )
             fig2.update_layout(
