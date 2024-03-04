@@ -24,4 +24,4 @@ RUN chmod +x entrypoint.sh migrate.sh collectstatic.sh
 EXPOSE 8000:8002
 
 # Define the command to start the container
-CMD ["app/src/entrypoint.sh"]
+CMD ["entrypoint.sh"]
