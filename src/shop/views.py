@@ -107,6 +107,7 @@ class MenuCategoryFilesView(View):
         paginator = client.get_paginator('list_objects_v2')
         category = get_object_or_404(MenuCategory, id=category_id)
         pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'category/{category.id}/')
+        data = {}
         for page in pag_gen:
             for c in page.get('Contents', []):
                 key = c.get('Key')
@@ -496,7 +497,7 @@ class MenuCategoryUpdateView(View):
 
     def post(self, request, category_id):
         category = MenuCategory.objects.get(id=category_id)
-        form = MenuCategoryForm(request.POST, instance=category)
+        form = MenuCategoryForm(request.POST, request.FILES, instance=category)
         if form.is_valid():
             form.save()
             return redirect('menu-category-list-view')

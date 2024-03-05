@@ -52,8 +52,6 @@ class ProductForm(forms.ModelForm):
             'image': 'Enter the price of the product',
         }
 
-
-
     def clean_image(self):
         old_image = self.instance.image
         new_image = self.cleaned_data.get('image')
@@ -113,13 +111,26 @@ class MenuCategoryForm(forms.ModelForm):
     def clean_image(self):
         old_image = self.instance.image
         new_image = self.cleaned_data.get('image')
+
         if old_image and old_image != new_image:
             old_image.delete(save=False)
+
+        if new_image:
+            img = Image.open(new_image)
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+                output = BytesIO()
+                img.save(output, format='JPEG', quality=75)
+                output.seek(0)
+                new_image = File(output, name=new_image.name)
+
         return new_image
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_tag = False
         self.helper.layout = Layout(
             HTML('<h1 class="text-center">Category Form</h1>'),
             *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],
