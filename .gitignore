@@ -126,6 +126,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+do_k8/.env.prod
 .env
 .venv
 env/
