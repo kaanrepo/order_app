@@ -15,6 +15,7 @@ import plotly.express as px
 ### s3
 import s3
 from order.env import config
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default=None)
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default=None)
@@ -153,7 +154,7 @@ class MenuCategoryListView(View):
             'categories': qs,
         }
         if request.htmx:
-            context['order'] = request.order
+            #context['order'] = request.order
             return render(request, 'partials/menu_categories_list.html', context=context)
         return render(request, 'pages/menu_categories_list.html', context=context)
     
@@ -237,7 +238,7 @@ class OrderItemCreateView(View):
         """If there's a quantity as a query parameter, use that. Otherwise, use the form."""
         order = request.order
         if order.is_finished:
-            messages.error(request, 'Order is already finalized.')
+            messages.error(request, "Can't add Items, order is already finalized.")
             return render(request, 'partials/messages_template.html', {})
         order_items = order.orderitem_set.all()
         menu_item = MenuItem.objects.get(id=item_id)
@@ -352,6 +353,9 @@ class DeleteOrderItemView(View):
 
     def post(self, request, item_id:int):
         order = request.order
+        if order.is_finished:
+            messages.error(request, "Can't delete, order is already finalized.")
+            return render(request, 'partials/messages_template.html', {})
         order_items = order.orderitem_set.all()
         order_item = OrderItem.objects.get(id=item_id)
         order_item.delete()
@@ -453,7 +457,8 @@ class ProductUpdateView(View):
         }
         return render(request, 'forms/object_form.html', context=context)
     
-class ProductDeleteView(View):
+class ProductDeleteView(LoginRequiredMixin, View):
+    raise_exception = True
     """View for deleting product."""
 
     def post(self, request, product_id):
@@ -505,8 +510,9 @@ class MenuCategoryUpdateView(View):
             'form': form
         }
         return render(request, 'forms/object_form.html', context=context)
-    
-class MenuCategoryDeleteView(View):
+   
+class MenuCategoryDeleteView(LoginRequiredMixin, View):
+    raise_exception = True
     """View for deleting menu category."""
 
     def post(self, request, category_id):
@@ -577,7 +583,8 @@ class MenuItemUpdateView(View):
         }
         return render(request, 'forms/object_form.html', context=context)
     
-class MenuItemDeleteView(View):
+class MenuItemDeleteView(LoginRequiredMixin, View):
+    raise_exception = True
     """View for deleting menu item."""
 
     def post(self, request, item_id):
@@ -739,7 +746,9 @@ class ProductProfileCreateView(View):
         return render(request, 'pages/product_create_page.html', context)
     
 
-class ProductProfileDeleteView(View):
+class ProductProfileDeleteView(LoginRequiredMixin, View):
+    raise_exception=True
+
     def post(self, request, handle:str):
         product = Product.objects.get(handle=handle)
         menu_item = MenuItem.objects.get(product=product)
@@ -794,7 +803,9 @@ class SectionCreateView(View):
         }
         return render(request, 'forms/object_form.html', context=context)
     
-class SectionDeleteView(View):
+class SectionDeleteView(LoginRequiredMixin, View):
+    raise_exception = True
+
     def post(self, request, section_id:int):
         section = get_object_or_404(Section, id=section_id)
         section.delete()
@@ -877,7 +888,9 @@ class TableEditView(View):
         }
         return render(request, 'partials/table_detail.html', context=context)
     
-class TableDeleteView(View):
+class TableDeleteView(LoginRequiredMixin, View):
+    raise_exception = True
+
     def post(self, request, table_id:int):
         table = get_object_or_404(Table, id=table_id)
         table.delete()

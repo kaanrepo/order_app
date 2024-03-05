@@ -1,7 +1,7 @@
 <div class="container mt-3">
     {% for message in messages %}
     <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-        <button display="hide"  hx-target="#order-items-container" hx-get={% url "partial-order-items-list-view" %} hx-trigger="load delay:1208ms" class="btn btn-warning btn-table btn-tal" type="button">Can't add items to finished orders.</button>
+        <button display="hide"  hx-target="#order-items-container" hx-get={% url "partial-order-items-list-view" %} hx-trigger="load delay:2000ms" class="btn btn-warning btn-table btn-tal" type="button">{{message}}</button>
     </div>
     {% endfor %}
 </div>

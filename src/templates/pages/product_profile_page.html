@@ -7,9 +7,14 @@
 
     {% include "partials/product_profile_details.html" %}
 </div>
+
 <script>
-    document.getElementById('deleteProductButton').addEventListener('htmx:afterOnLoad', function() {
-        window.location.href = "{% url "product-list-view" %}";  // Redirect to product list view after product deletion
+    document.getElementById('deleteProductButton').addEventListener('htmx:afterRequest', function(event) {
+        if (event.detail.xhr.status == 403) {
+            window.location.href = event.detail.xhr.responseURL;
+        } else if (event.detail.xhr.status == 200) {
+            window.location.href = "{% url 'home-view' %}";
+        }
     });
 </script>
 {% endblock content %}

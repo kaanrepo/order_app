@@ -32,9 +32,14 @@
     </div>
 </div>
 
+
 <script>
-    document.getElementById('deleteSectionButton').addEventListener('htmx:afterOnLoad', function() {
-        window.location.href = "{% url "home-view" %}";  // replace '/home' with your actual home page URL
+    document.getElementById('deleteSectionButton').addEventListener('htmx:afterRequest', function(event) {
+        if (event.detail.xhr.status == 403) {
+            window.location.href = event.detail.xhr.responseURL;
+        } else if (event.detail.xhr.status == 200) {
+            window.location.href = "{% url 'home-view' %}";
+        }
     });
 </script>
 

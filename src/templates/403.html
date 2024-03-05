@@ -1,0 +1,21 @@
+{% extends "main/new_base.html" %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+    <div class="error mx-auto" data-text="403">
+        <p class="m-0">403</p>
+    </div>
+    <p class="text-dark mb-5 lead">You are not authorized.</p>
+    <p class="text-black-50 mb-0">uh oh...</p>
+</div>
+
+
+
+<script type="text/javascript">
+    setTimeout(function(){
+        window.location.href = "{% url 'home-view' %}";
+    }, 5000);
+</script>
+
+{% endblock content %}
