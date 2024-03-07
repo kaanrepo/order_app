@@ -125,8 +125,12 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
+
 # Environments
+do_k8/*
+do_k8/.env
 do_k8/.env.prod
+do_k8/docker-compose.yaml
 .env
 .venv
 env/

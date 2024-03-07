@@ -93,7 +93,8 @@ class MenuItemForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.fields['category'].empty_label = "Select a category"
+        self.fields['category'].empty_label = None
+        self.fields['category'].required = True
         self.helper.form_show_labels = False
         self.helper.form_tag = False
         self.helper.layout = Layout(
@@ -149,7 +150,8 @@ class TableForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.fields['section'].empty_label = "Select a section"
+        self.fields['section'].empty_label = None
+        self.fields['section'].required = True
         self.helper.layout = Layout(
             HTML('<h1 class="text-center">Table Form</h1>'),
             *[Div(InlineField(field), css_class='col-md-6 offset-md-3 mb-3') for field in self.fields],

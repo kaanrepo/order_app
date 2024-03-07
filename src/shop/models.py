@@ -50,7 +50,6 @@ class Product(models.Model):
     size = models.CharField(max_length=50)
     handle = models.SlugField(null=True, blank=True)
     image = models.ImageField(upload_to=product_image_upload_path, blank=True, null=True, validators=[validate_file_extension, validate_file_size])
-    image2 = models.ImageField(upload_to='product/', blank=True, null=True)
 
     objects = ProductManager()
 
@@ -153,13 +152,16 @@ class Section(models.Model):
 class Table(models.Model):
     """Model for table in the restaurant."""
     section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True, blank=True)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
     in_use = models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True)
     # handle = models.SlugField(null=True, blank=True)  DOES NOT NEED A HANDLE
 
     def __str__(self):
         return f"{self.name}"
+    
+    class Meta:
+        unique_together = ('name', 'section',)
 
     # def save(self, *args, **kwargs):
     #     if not self.handle:
