@@ -38,7 +38,7 @@ ALLOWED_HOSTS = []
 ALLOWED_HOST_ENV = config("DJANGO_ALLOWED_HOST", default=None)
 
 if ALLOWED_HOST_ENV:
-    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOST_ENV.split(",")]
+    ALLOWED_HOSTS = [f"'{host.strip()}'" for host in ALLOWED_HOST_ENV.split(",")]
 
 
 
