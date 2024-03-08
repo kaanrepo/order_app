@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.shortcuts import reverse
 from order.env import config
 import boto3
-from .validators import validate_file_extension, validate_file_size
+from .validators import validate_file_extension, validate_image
 
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID', default=None)
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default=None)
@@ -49,7 +49,7 @@ class Product(models.Model):
         max_length=50, choices=UNIT_CHOICES, default='draft')
     size = models.CharField(max_length=50)
     handle = models.SlugField(null=True, blank=True)
-    image = models.ImageField(upload_to=product_image_upload_path, blank=True, null=True, validators=[validate_file_extension, validate_file_size])
+    image = models.ImageField(upload_to=product_image_upload_path, blank=True, null=True, validators=[validate_file_extension, validate_image])
 
     objects = ProductManager()
 
@@ -88,7 +88,7 @@ class MenuCategory(models.Model):
     name = models.CharField(max_length=50, unique=True)
     handle = models.SlugField(null=True, blank=True)
     description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to=category_image_upload_path, blank=True, null=True, validators=[validate_file_extension, validate_file_size])
+    image = models.ImageField(upload_to=category_image_upload_path, blank=True, null=True, validators=[validate_file_extension, validate_image])
 
     def __str__(self):
         return f"{self.name}"

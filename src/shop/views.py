@@ -600,50 +600,35 @@ class ProductProfileFilesView(View):
     def get(self, request, handle:str):
         if not request.htmx:
             return redirect('home-view')
-        client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
-                            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                            default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
-        paginator = client.get_paginator('list_objects_v2')
-        obj_list = []
+        # paginator = client.get_paginator('list_objects_v2')
+        # obj_list = []
         product = Product.objects.get(handle=handle)
-        pag_gen = paginator.paginate(Bucket=AWS_STORAGE_BUCKET_NAME, Prefix=f'product/{product.id}/')
-        for page in pag_gen:
-            for c in page.get('Contents', []):
-                key = c.get('Key')
-                size = c.get('Size')
-                name = pathlib.Path(key).name
-                _type = None
-                try:
-                    _type = mimetypes.guess_type(name)[0]
-                except:
-                    pass
-                if size ==0:
-                    continue
+        if product.image:
+            client = s3.S3Client(aws_access_key_id=AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                    default_bucket_name=AWS_STORAGE_BUCKET_NAME).client
+            try:
+                client.head_object(Bucket=AWS_STORAGE_BUCKET_NAME, Key=product.image.name)
                 url = client.generate_presigned_url(
                     'get_object',
                     Params={
                         'Bucket': AWS_STORAGE_BUCKET_NAME,
-                        'Key': key
+                        'Key': product.image.name
                     },
                     ExpiresIn=1000
                 )
-                try:
-                    is_image = 'image' in _type
-                except:
-                    is_image = False
-                data = {
-                    'product': product,
-                    'key': key,
-                    'size': size,
-                    'type': _type,
-                    'name': name,
-                    'is_image': is_image,
-                    'url': url
+                is_image = True
+            except:
+                url = None
+                is_image = False
+            data = {
+                'product': product,
+                'is_image': is_image,
+                'url': url
+            }
 
-                }
-                obj_list.append(data)
         context = {
-            'obj_list': obj_list
+            'data': data
         }
         return render(request, 'partials/product_profile_files.html', context=context)
 

@@ -1,11 +1,9 @@
 {% load static %}
 
-{% for obj_dict in obj_list %}
     <div class="card-body text-center shadow" style="">
-        {% if obj_dict.is_image %}
-        <img class="mb-3 mt-4" style="border-radius:10px;"src="{{obj_dict.url}}" alt={{obj_dict.product.name}} title={{obj_dict.product.name}} /> 
+        {% if data.is_image %}
+        <img class="mb-3 mt-4" style="border-radius:10px;"src="{{data.url}}" alt={{data.product.name}} title={{data.product.name}} /> 
         {% else %}
         <img class="rounded-circle mb-3 mt-4" style="height: 200px;" src="{% static 'img/placeholder.png' %}" alt={{obj_dict.product.name}} title={{obj_dict.product.name}} />
         {% endif %}       
     </div>
-{% endfor %}

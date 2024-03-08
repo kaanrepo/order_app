@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='menucategory',
             name='image',
-            field=models.ImageField(blank=True, null=True, upload_to=shop.models.category_image_upload_path, validators=[shop.validators.validate_file_extension, shop.validators.validate_file_size]),
+            field=models.ImageField(blank=True, null=True, upload_to=shop.models.category_image_upload_path, validators=[shop.validators.validate_file_extension]),
         ),
         migrations.AlterField(
             model_name='product',
             name='image',
-            field=models.ImageField(blank=True, null=True, upload_to=shop.models.product_image_upload_path, validators=[shop.validators.validate_file_extension, shop.validators.validate_file_size]),
+            field=models.ImageField(blank=True, null=True, upload_to=shop.models.product_image_upload_path, validators=[shop.validators.validate_file_extension]),
         ),
     ]
