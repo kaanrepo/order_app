@@ -1,5 +1,6 @@
 from pathlib import Path
 from django.core.exceptions import ValidationError
+from PIL import Image
 
 def validate_file_extension(value):
     import os
@@ -14,3 +15,15 @@ def validate_file_size(value):
     
     if filesize > 2097152:
         raise ValidationError("The maximum file size that can be uploaded is 2MB")
+    
+def validate_image(image):
+    # Check the file size
+    if image.size > 2 * 1024 * 1024:  # 2MB
+        raise ValidationError("The maximum file size that can be uploaded is 2MB")
+
+    # Check if it's a valid image
+    try:
+        img = Image.open(image)
+        img.verify()  # verify that it is, in fact an image
+    except (IOError, SyntaxError) as e:
+        raise ValidationError('Invalid image') 

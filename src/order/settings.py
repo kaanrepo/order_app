@@ -35,10 +35,11 @@ if DJANGO_DEBUG == "0":
 
 ALLOWED_HOSTS = []
 
-ALLOWED_HOST = config("DJANGO_ALLOWED_HOST", default=None, cast=str)
+ALLOWED_HOST_ENV = config("DJANGO_ALLOWED_HOST", default=None)
 
-if ALLOWED_HOST:
-    ALLOWED_HOSTS.append(ALLOWED_HOST)
+if ALLOWED_HOST_ENV:
+    ALLOWED_HOSTS = [host.strip() for host in ALLOWED_HOST_ENV.split(",")]
+
 
 
 
@@ -100,23 +101,23 @@ WSGI_APPLICATION = 'order.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config("POSTGRES_DB", default=None, cast=str),
-        'USER': config("POSTGRES_USER", default=None, cast=str),
-        'PASSWORD': config("POSTGRES_PASSWORD", default=None, cast=str),
-        'HOST': config("POSTGRES_HOST", default=None, cast=str),
-        'PORT': config("POSTGRES_PORT", default=None, cast=int),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': config("POSTGRES_DB", default=None, cast=str),
+#         'USER': config("POSTGRES_USER", default=None, cast=str),
+#         'PASSWORD': config("POSTGRES_PASSWORD", default=None, cast=str),
+#         'HOST': config("POSTGRES_HOST", default=None, cast=str),
+#         'PORT': config("POSTGRES_PORT", default=None, cast=int),
+#     }
+# }
 
 
 # Password validation
