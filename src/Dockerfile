@@ -21,7 +21,7 @@ RUN pip install -r requirements.txt
 RUN chmod +x entrypoint.sh migrate.sh collectstatic.sh
 
 # Expose the port the app runs in
-EXPOSE 8000:8002
+EXPOSE 8000
 
 # Define the command to start the container
 CMD ["./entrypoint.sh"]
