@@ -35,11 +35,10 @@ if DJANGO_DEBUG == "0":
 
 ALLOWED_HOSTS = []
 
-ALLOWED_HOST_ENV = config("DJANGO_ALLOWED_HOST", default=None)
+ALLOWED_HOST = config("DJANGO_ALLOWED_HOST", default=None, cast=str)
 
-if ALLOWED_HOST_ENV:
-    ALLOWED_HOSTS.append(ALLOWED_HOST_ENV)
-
+if ALLOWED_HOST:
+    ALLOWED_HOSTS.append(ALLOWED_HOST)
 
 
 
