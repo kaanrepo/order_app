@@ -174,10 +174,12 @@ class OrderItem(models.Model):
 
     order = models.ForeignKey('Order', on_delete=models.CASCADE)
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
+    price_at_order = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField()
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     is_delivered = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"{self.menu_item.product.name} x {self.quantity}"

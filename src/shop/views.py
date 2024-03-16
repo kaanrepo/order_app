@@ -226,13 +226,13 @@ class OrderItemCreateView(View):
         if quantity is not None:
             if all([quantity.isdigit(), int(quantity) > 0]):
                 order_item = OrderItem.objects.create(
-                    order=order, menu_item=menu_item, quantity=int(quantity))
+                    order=order, menu_item=menu_item, price_at_order=menu_item.price, quantity=int(quantity))
                 order_item.save()
                 return render(request, 'partials/order_items_list.html', context)
         if form.is_valid():
             quantity = form.cleaned_data['quantity']
             order_item = OrderItem.objects.create(
-                order=order, menu_item=menu_item, quantity=quantity)
+                order=order, menu_item=menu_item, price_at_order=menu_item.price, quantity=quantity)
             order_item.save()
             return render(request, 'partials/order_items_list.html', context)
 
