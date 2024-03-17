@@ -180,6 +180,11 @@ class OrderItem(models.Model):
     updated = models.DateTimeField(auto_now=True)
     is_delivered = models.BooleanField(default=False)
 
+    @property
+    def total_price(self):
+        return self.quantity * self.price_at_order
+
+
 
     def __str__(self):
         return f"{self.menu_item.product.name} x {self.quantity}"
@@ -220,7 +225,7 @@ class Order(models.Model):
     @property
     def total_bill(self):
         """ Calculate total bill for the order."""
-        return sum([item.menu_item.price * item.quantity for item in self.orderitem_set.all()])
+        return sum([item.price_at_order * item.quantity for item in self.orderitem_set.all()])  
 
     def __str__(self):
         return self.table.name + '- order:' + str(self.id)

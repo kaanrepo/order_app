@@ -966,6 +966,15 @@ class ChartsView(View):
     
 
 
-
-
-
+class OrderReceiptView(View):
+    def get(self, request, order_id:int):
+        order = get_object_or_404(Order, id=order_id)
+        total = order.orderitem_set.all().values('menu_item__product__name').annotate(
+            total_quantity=Sum('quantity'),
+            total_price=Sum(F('quantity') * F('price_at_order')),
+        )
+        context = {
+            'order': order,
+            'total': total
+        }
+        return render(request, 'pages/order_receipt_page.html', context)

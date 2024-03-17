@@ -41,7 +41,8 @@ from .views import (ActivateTableOrderView,
                     MenuCategoryFilesView,
                     MenuItemFilesView,
                     UndeliveredItemsView,
-                    ChartsView,)
+                    ChartsView,
+                    OrderReceiptView,)
 
 urlpatterns = [
     path('', ActiveDashboardView.as_view(), name='home-view'),
@@ -53,6 +54,7 @@ urlpatterns = [
     path('order/finalize/<int:order_id>/', FinalizeOrderView.as_view(), name='finalize-order-view'),
     path('order/finish-all/', FinishOpenOrdersView.as_view(), name='finish-open-orders-view'),
     path('order/historical/', HistoricalOrdersView.as_view(), name='historical-orders-view'),
+    path('order/<int:order_id>/receipt/', OrderReceiptView.as_view(), name='order-receipt-view'),
     ### OrderItem URLs
     path('order_item/create/<int:item_id>/', OrderItemCreateView.as_view(), name='order-item-create-view'),
     path('order_item/deliver/<int:item_id>/', DeliverOrderItemView.as_view(), name='deliver-order-item-view'),

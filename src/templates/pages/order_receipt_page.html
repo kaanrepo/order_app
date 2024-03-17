@@ -1,0 +1,32 @@
+{% extends "main/new_base.html" %}
+
+{% block content %}
+
+{{order}}
+
+<br>
+<hr>
+
+{{total}}
+
+<hr>
+
+{% for key, value, z in total %}
+{{key}} // {{value}} // {{z}}
+
+<br>
+<hr>
+{% endfor %}
+
+<hr>
+
+<ul>
+{% for item in total %}
+<li>{{item.menu_item__product__name}}  x {{item.total_quantity}} = {{item.total_price}} TL </li>
+{% endfor %}    
+</ul>
+
+
+Total: {{order.total_bill}} TL
+
+{% endblock content %}
